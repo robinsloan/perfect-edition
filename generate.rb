@@ -37,6 +37,10 @@ if Dir.exist?("build/#{slug}")
   `rm -r build/#{slug}`
 end
 
+unless Dir.exist?("build")
+  `mkdir build`
+end
+
 `mkdir build/#{slug}`
 `mkdir build/#{slug}/web`
 `mkdir build/#{slug}/epub`
