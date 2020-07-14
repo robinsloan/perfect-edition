@@ -1,0 +1,17 @@
+---
+title: "Annabel Scheme and the Adventure of the New Golden Gate"
+title_html: <div class="title">
+            <h1><span>Annabel&nbsp;Scheme</span>
+                <span>and&nbsp;the</span>
+                <span>Adventure of&nbsp;the New&nbsp;Golden&nbsp;Gate</span>
+            </h1>
+            <h2>Robin Sloan</h2>
+            </div>
+description: This is a story originally published as a newspaper serial in the Mercury News and the East Bay Times.
+author: Robin Sloan
+slug: annabel-scheme-new-golden-gate
+pub_date: 2020-07-01
+home_url: "https://www.robinsloan.com/book/annabel-scheme-new-golden-gate"
+cover_image: "img/scheme-cover-web.png"
+markdown_source: annabel-scheme-new-golden-gate.md
+spot_color: "rgb( 192, 54, 44)"

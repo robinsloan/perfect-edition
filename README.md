@@ -1,0 +1,1 @@
+I am composing this project's README today (Tuesday, July 14) so come back later for my incisive articulation of this project's goals & shortcomings! 😝

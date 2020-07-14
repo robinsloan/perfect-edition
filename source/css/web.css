@@ -1,0 +1,730 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 400;
+  font-style: normal;
+  src: url("/font/Vollkorn-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 400;
+  font-style: italic;
+  src: url("/font/Vollkorn-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 500;
+  font-style: normal;
+  src: url("/font/Vollkorn-Semibold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 500;
+  font-style: italic;
+  src: url("/font/Vollkorn-SemiboldItalic.woff2") format("woff2");
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  text-rendering: optimizelegibility;
+}
+
+:root {
+  --base-unit: clamp(28px, 5vh, 56px); /* used to be vw, but vh works better */
+  --base-unit-half: calc( var(--base-unit) / 2.0 );
+
+  --font-size: var(--base-unit-half);
+  --line-height: 1.4rem;
+  --print-line-height: 1.4rem;
+
+  --vertical-padding: var(--base-unit);
+
+  --column-width: clamp(480px, 50vw, 640px);
+    /* this 4.0 is a bit cryptic; we are making space for the toc button:; */
+  --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
+  --column-gap: var(--base-unit);
+
+  --paper-hue: 100;
+  --paper-saturation: 50%;
+  --paper-lightness: 99%;
+  --paper-color: hsla( var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 1.0 );
+
+  --shade-color-destination: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.0);
+  --shade-color-origin: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.75);
+
+  --spot-color: hsla(340, 100%, 50%, 1.0);
+  --selection-color: hsla(340, 100%, 75%, 1.0);
+  --text-color: rgb(5, 5, 5);
+
+  --page-count: 1;
+}
+
+::-moz-selection { background: var(--selection-color); }
+::selection { background: var(--selection-color); }
+
+html {
+  overflow: hidden; /* the key, always */
+  font-size: var(--font-size);
+  scroll-behavior: smooth;
+
+  font-feature-settings: "kern", "liga", "ss11";
+}
+
+body {
+  margin: 0;
+
+  height: 100vh; /* so scrollbar appears at bottom */
+
+  background-color: var(--paper-color);
+  padding: var(--vertical-padding) 0 0 0;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  /* to justify or not to justify? */
+  text-align: left; /* sigh */
+  line-height: var(--line-height);
+
+  color: var(--text-color);
+  font-family: "Vollkorn", serif;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+div.tutorial {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: var(--column-width);
+  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
+
+  text-align: center;
+
+  break-after: column;
+}
+
+div.tutorial h2 {
+  height: auto;
+  flex-grow: 0;
+  margin-top: 0;
+  margin-bottom: var(--line-height);
+}
+
+div.tutorial p {
+  flex-grow: 0;
+  margin-bottom: var(--line-height);
+}
+
+button {
+  outline: none;
+  border: none;
+  background: none;
+  background-color: transparent;
+  touch-action: manipulation;
+}
+
+nav {
+  position: fixed;
+
+  top: calc( var(--vertical-padding) + var(--base-unit) );
+  /* the toc is 90% of the page's width */
+  left: calc( 50vw - var(--column-width) * 0.45);
+
+  z-index: 10000;
+  /* this is all a little bit stupid and I'm sure there's a more
+  principled way to do it */
+  width: calc( var(--column-width) * 0.9 );
+  height: calc( var(--column-height) - var(--base-unit) );
+
+  border: 1px solid var(--spot-color);
+
+  background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  text-align: left;
+
+  transition: opacity 0.1s;
+
+  box-shadow: 0 0 var(--base-unit-half) 1px var(--spot-color);
+}
+
+nav.visible {
+  opacity: 1.0;
+  pointer-events: auto;
+}
+
+nav.invisible {
+  opacity: 0.0;
+  pointer-events: none;
+}
+
+nav div.toc {
+  width: calc( var(--column-width) * 0.9 );
+  height: calc( var(--column-height) - var(--base-unit) * 2.0 );
+
+  padding: var(--base-unit);
+
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+nav div.controls {
+  display: flex;
+  position: fixed;
+
+  /* this is getting a bit silly... */
+  top: calc( var(--vertical-padding) +
+             var(--column-height) - var(--base-unit) * 2.0 );
+  left: calc( 50vw - var(--column-width) * 0.45);
+
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+
+  width: calc( var(--column-width) * 0.9 );
+  height: calc( var(--base-unit) * 2.0 );
+
+  border: 1px solid var(--spot-color);
+
+  background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
+
+  z-index: 100000;
+}
+
+nav div.controls button {
+  flex-shrink: 0;
+
+  margin: 0 var(--base-unit-half) 0 0;
+  width: var(--base-unit);
+  /*line-height: calc( var(--base-unit) * 2.0 );*/
+  height: auto;
+
+  padding: 0;
+
+  cursor: pointer;
+  text-align: center;
+  color: var(--spot-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+nav div.controls button:last-child {
+  margin: 0 0 0 0;
+}
+
+nav div.controls button:hover {
+  color: var(--text-color);
+}
+
+nav h1 {
+  margin: 0 0 var(--line-height) 0;
+  width: calc( var(--column-width) * 0.9 - calc( var(--base-unit) * 2.0 ) );
+  padding: 0;
+  /* text-transform: uppercase; */
+  font-style: italic;
+  line-height: var(--line-height);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+nav ol {
+  margin: 0;
+  width: 90%;
+  padding: 0;
+  list-style-type: none;
+  margin-bottom: var(--line-height);
+}
+
+nav ol li {
+  margin: 0 0 var(--line-height) 0;
+  line-height: var(--line-height);
+  font-size: 1rem;
+}
+
+nav ol li:last-of-type {
+  margin: 0 0 0 0;
+}
+
+button#toc-button {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+
+  left: 50vw;
+
+  flex-direction: column;
+  justify-content: center;
+
+  z-index: 100000;
+  width: calc( var(--base-unit) * 2.0 );
+  height: var(--base-unit);
+
+  border: 1px solid var(--text-color);
+  background-color: var(--paper-color);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+button#toc-button:hover {
+  border: 1px solid var(--spot-color);
+  fill: var(--spot-color);
+}
+
+button#toc-button svg {
+  flex-grow: 1;
+}
+
+div#bookmark {
+  display: none;
+  position: absolute;
+  z-index: 100000;
+  width: var(--base-unit);
+  height: calc( var(--base-unit) * 2.0 );
+  top: calc( var(--vertical-padding) * -2.5 ); /* now THAT is a stupid magic number */
+  left: calc( var(--column-width) / 2.0 );
+  transform: translateX(-50%);
+  fill: var(--spot-color);
+
+  /* https://stackoverflow.com/questions/58404417/mobile-safari-not-rendering-fixed-element-outside-of-viewport-unless-it-has-no-c */
+  /* computers... */
+}
+
+div.book div.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: var(--column-width);
+  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
+
+  text-align: center;
+  /* break-after: column; */
+}
+
+div.book div.title h1 {
+  height: auto;
+
+  flex-grow: 0;
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  line-height: calc( var(--line-height) * 2.0 );
+
+  font-size: 2rem;
+  font-weight: 500;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
+
+  color: var(--text-color);
+}
+
+div.book div.title h1 span {
+  display: block;
+}
+
+div.book div.title h2 {
+  flex-grow: 0;
+  margin-top: var(--line-height);
+}
+
+div.book h1 {
+  height: calc( var(--column-height) - 1px);
+
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  line-height: var(--column-height);
+
+  font-size: 2rem;
+  font-weight: 500;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
+
+  color: var(--spot-color);
+
+  text-align: center;
+  break-before: column;
+}
+
+h2 {
+  margin: calc( var(--line-height) * 6.0 ) 0 calc( var(--line-height) * 2.0 ) 0;
+  padding: 0;
+  line-height: calc( var(--line-height) * 2.0 );
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-style: italic;
+  break-before: column;
+}
+
+a, a:link, a:visited {
+  color: var(--spot-color);
+}
+
+a:hover, h2 a:active {
+  color: var(--text-color);
+}
+
+blockquote {
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.125);
+  padding: var(--base-unit);
+  font-style: italic;
+  break-before: avoid-column;
+}
+
+div.book {
+  position: relative;
+
+  scroll-snap-align: start;
+  column-gap: var(--base-unit);
+  column-fill: auto;
+  column-count: auto;
+  column-width: var(--column-width);
+
+  margin: var(--base-unit-half);
+  width: var(--column-width); /* must match column-width, or am fucked */
+
+  height: var(--column-height);
+
+  /*
+  -webkit-perspective: 1;
+  perspective: 1;
+  */
+}
+
+/* an interesting approach to this */
+/* https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c */
+
+div.shadow-page-container {
+  display: none;
+  position: relative;
+  /* margin: var(--base-unit-half); */
+  width: calc( 100vw * var(--page-count));
+}
+
+div.shadow-page {
+  background-color: transparent;
+  float: left;
+  height: 1px;
+  margin-left: 0;
+  margin-right: var(--column-gap);
+  width: var(--column-width);
+  scroll-snap-align: start;
+  position: relative;
+  z-index: -10;
+}
+
+
+div.shade {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
+  height: 100vh;
+}
+
+/* love you, pseudo elements! */
+/* these are the book's "shades" */
+/* for svg encoding: https://yoksel.github.io/url-encoder/ */
+
+/*svg original:
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 60 90" xml:space="preserve">
+  <g>
+    <rect x="0" y="0" width="60" height="90" style="fill: rgba(255, 255, 255, 0.75);" />
+    <polygon points="30,45 60,30 60,60" style="fill: rgba(0, 0, 0, 0.125);" />
+  </g>
+</svg>
+*/
+
+div.book::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
+  height: 100vh;
+
+  /* specific to left shade */
+  left: 0;
+  background: linear-gradient(to right,
+                              var(--shade-color-origin) 0%,
+                              var(--shade-color-origin) 95%,
+                              var(--shade-color-destination) 100%);
+
+  /* i just don't think this is necessary...
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='100%25' height='100%25' viewBox='0 0 60 90' xml:space='preserve'%3E%3Cg%3E%3Crect x='0' y='0' width='60' height='90' style='fill: rgba(255, 255, 255, 0.75);' /%3E%3Cpolygon points='30,45 60,30 60,60' style='fill: rgba(0, 0, 0, 0.125);' /%3E%3C/g%3E%3C/svg%3E");
+  */
+}
+
+div.book::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
+  height: 100vh;
+
+  /* specific to right shade */
+  right: 0;
+  background: linear-gradient(to left,
+                              var(--shade-color-origin) 0%,
+                              var(--shade-color-origin) 95%,
+                              var(--shade-color-destination) 100%);
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  text-indent: var(--base-unit-half);
+}
+
+span.nobr {
+  white-space: nowrap;
+}
+
+p.spacetime {
+  margin-top: var(--line-height);
+  text-indent: 0;
+}
+
+small {
+  text-transform: lowercase;
+  font-size: 1.025rem;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  hyphens: none;
+}
+
+img {
+  display: block;
+  /* this was sort of interesting but, nah */
+  /* transform: translateX( var(--base-unit-half) ); */
+  /* width: calc(var(--column-width) + var(--base-unit)); */
+  width: var(--column-width);
+  height: var(--column-height);
+  max-height: var(--column-height);
+
+  overflow: hidden;
+  -webkit-column-break-before: always;
+  -webkit-column-break-inside: avoid;
+
+  break-before: column;
+  /*max-width: 100%;*/
+  mix-blend-mode: multiply;
+  object-fit: contain; /* contain? */
+}
+
+hr {
+  margin: var(--base-unit) auto var(--base-unit) auto;
+  width: 50%;
+  border: none;
+  border-bottom: 1px solid var(--spot-color);
+  break-after: avoid-column;
+  /* break-after: column; */
+}
+
+p.last-page {
+  break-before: column;
+}
+
+p.last-page::after {
+  display: block;
+  height: var(--column-height);
+
+  content: "";
+}
+
+/* print stuff */
+/* this is sort of a mess... */
+
+div.print-cover {
+  display: none;
+
+  width: 100%;
+  height: 100%;
+
+  page-break-after: always;
+}
+
+div.print-cover div.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  text-align: center;
+}
+
+div.print-cover div.title h1 {
+  flex-grow: 0;
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  line-height: calc( var(--line-height) * 2.0 );
+
+  font-size: 2rem;
+  font-weight: 500;
+  font-variant:small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
+}
+
+div.print-cover div.title h1 span {
+  display: block;
+}
+
+div.print-cover div.title h2 {
+  flex-grow: 0;
+  margin-top: var(--line-height);
+}
+
+/* media queries */
+
+@media screen and (max-width: 640px) {
+
+  :root {
+    --column-width: calc(100vw - var(--base-unit));
+    /* this is quite blunt */
+    /* but it's to compensate for mobile browser chrome */
+    /* maybe there's a more elegant solution? */
+    --column-height: 65vh;
+  }
+
+  body {
+    height: calc( var(--column-height) + var(--vertical-padding) * 2.0 );
+    /* having this set at 100vh was causing that weird mobile slip problem */
+
+    /* this is really interesting: */
+    scroll-snap-type: x mandatory;
+    /* idea from: https://github.com/jpamental/moby-dick/pull/5 */
+    /* with thanks to kyle gach */
+  }
+
+  div.shadow-page-container {
+    display: block;
+  }
+
+  div.book::before, div.book::after {
+    display: none;
+  }
+
+}
+
+@media screen and (min-width: 640px) {
+
+  div.book {
+    margin-left: calc(50vw - var(--column-width) / 2.0);
+  }
+
+}
+
+@media screen and (min-height: 1000px) {
+
+  :root {
+    --vertical-padding: calc( var(--base-unit) * 2.0 );
+  }
+
+  div#bookmark {
+    top: calc( var(--vertical-padding) * -1.5 ); /* now THAT is a stupid magic number */
+  }
+
+}
+
+@media print {
+
+  html {
+    overflow: auto;
+    font-size: 12pt;
+  }
+
+  div.book::before, div.book::after, nav, button#toc-button, img.cover, div.last-page, div#bookmark, div.tutorial {
+    display: none;
+  }
+
+  div.book div.title {
+    display: none;
+  }
+
+  @page {
+    /* surely i should be able to set this lower and have it still work? i am confused */
+
+    margin: 2in;
+  }
+
+  body {
+    height: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    line-height: var(--print-line-height);
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+  }
+
+  div.print-cover {
+    display: block;
+  }
+
+  div.book {
+
+    /* i really wanted columns to work for printing but... they do not */
+    column-count: 1;
+    column-width: auto;
+    column-gap: 0;
+    column-fill: auto;
+
+    columns: none;
+
+    margin: 0;
+    width: 100%;
+    height: auto;
+
+    /*
+    column-width: auto;
+    column-count: 2;
+    column-gap: var(--base-unit);
+    column-fill: auto;
+    */
+
+    text-align: left;
+    orphans: 2;
+    widows: 2;
+  }
+
+  h2 {
+    display: block;
+    position: relative;
+
+    margin-top: 0;
+    margin-bottom: var(--print-line-height);
+    line-height: var(--print-line-height);
+    font-size: 1rem;
+
+    /* this isn't working :( */
+
+    break-before: page !important;
+  }
+
+  hr {
+    break-after: avoid-page !important;
+  }
+
+  small {
+    /* small caps weren't working correctly when actually printed, so! */
+    text-transform: none;
+    font-size: 1.0rem;
+    font-weight: 400;
+    font-variant: none;
+    font-variant-caps: none;
+  }
+}

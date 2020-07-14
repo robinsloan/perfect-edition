@@ -1,0 +1,204 @@
+@charset "UTF-8";
+@namespace "http://www.w3.org/1999/xhtml";
+@namespace epub "http://www.idpf.org/2007/ops";
+
+/* compatability junk */
+
+article,
+aside,
+figure,
+figcaption,
+footer,
+header,
+main,
+nav,
+section,
+div {
+  display: block;
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 400;
+  font-style: normal;
+  src: url("font/Vollkorn-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 400;
+  font-style: italic;
+  src: url("font/Vollkorn-Italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 500;
+  font-style: normal;
+  src: url("font/Vollkorn-Semibold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Vollkorn";
+  font-weight: 500;
+  font-style: italic;
+  src: url("font/Vollkorn-SemiboldItalic.woff2") format("woff2");
+}
+
+html {
+  font-feature-settings: "kern", "liga", "ss11";
+}
+
+body {
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  font-family: Vollkorn, Palatino, Malabar, Merriweather, "Droid Serif", serif;
+  line-height: 1.4rem;
+  widows: 2; /* iBooks & Kobo */
+  orphans: 2; /* iBooks & Kobo */
+}
+
+section#titlepage {
+  height: 100%; /* was 100 */
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+div.title {
+  margin-top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+div.title h1 {
+  page-break-before: avoid;
+
+  font-size: 2rem;
+  line-height: 2.2rem;
+
+  text-transform: lowercase;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  font-weight: 500;
+  font-style: italic;
+
+  padding-bottom: 1.4rem;
+  padding-top: 0;
+
+  text-align: center;
+}
+
+div.title span {
+  display: block;
+}
+
+div.title h2 {
+  page-break-before: avoid;
+  font-size: 1rem;
+  line-height: 1.4rem;
+  font-style: normal;
+  padding-top: 0;
+  text-align: center;
+}
+
+h1 {
+  page-break-before: always;
+
+  font-size: 2rem;
+  line-height: 2.2rem;
+
+  text-transform: lowercase;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  font-weight: 500;
+  font-style: italic;
+
+  padding-top: 5.6rem;
+  padding-bottom: 0;
+
+  text-align: center;
+}
+
+h2 {
+  page-break-before: always;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  font-weight: 500;
+  font-style: italic;
+  padding-top: 5.6rem;
+  padding-bottom: 1.4rem;
+  text-align: center;
+}
+
+ol {
+  list-style-type: none;
+}
+
+p {
+  text-indent: 1.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+p.spacetime {
+  margin-top: 1.4rem;
+  text-indent: 0;
+}
+
+span.nobr {
+  white-space: nowrap;
+}
+
+h2 + p { /* wow i didn't know you could do this */
+  text-indent: 0;
+}
+
+small {
+  hyphens: none;
+  font-size: 1.15rem;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  text-transform: lowercase;
+}
+
+img {
+  display: block;
+
+  width: 100%;
+  max-width: 100%;
+  mix-blend-mode: multiply;
+  height: 100%;
+  max-height: 100%;
+  object-fit: cover;
+
+  overflow: hidden;
+}
+
+hr {
+  margin: 2rem auto 2rem auto;
+  width: 50%;
+  border: none;
+  border-bottom: 1px solid rgb(0, 0, 0);
+  page-break-after: avoid;
+}
+
+/* https://wiki.mobileread.com/wiki/KindleGen */
+
+@media amzn-kf8 {
+  h1 {
+    text-transform: uppercase;
+    font-variant: none;
+    font-variant-caps: none;
+  }
+}
+
+@media amzn-mobi {
+  h1 {
+    text-transform: uppercase;
+    font-variant: none;
+    font-variant-caps: none;
+  }
+}

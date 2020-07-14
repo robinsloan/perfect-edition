@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid" xml:lang="en-US" prefix="cc: http://creativecommons.org/ns#">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dc:identifier id="uid">com.robinsloan.{{slug}}</dc:identifier>
+        <dc:title>{{title}}</dc:title>
+        <dc:creator>{{author}}</dc:creator>
+        <dc:language>en-US</dc:language>
+        <dc:date>{{pub_date}}</dc:date>
+        <dc:description>{{description}}</dc:description>
+        <meta property="dcterms:modified">{{modified_date}}</meta>
+        <dc:rights>This work is shared with the public using the Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) license.</dc:rights>
+        <link rel="cc:license" href="http://creativecommons.org/licenses/by-sa/3.0/"/>
+        <meta property="cc:attributionURL">{{home_url}}</meta>
+    </metadata>
+    <manifest>
+        <item id="{{slug}}" href="{{slug}}-content.xhtml" media-type="application/xhtml+xml" />
+        <item id="nav" href="{{slug}}-nav.xhtml" properties="nav" media-type="application/xhtml+xml" />
+        <item id="css" href="epub.css" media-type="text/css" />
+
+        {{ epub_image_manifest_xml }}
+
+        {{ epub_font_manifest_xml }}
+
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
+    </manifest>
+    <spine toc="ncx">
+        <itemref idref="{{slug}}" />
+    </spine>
+</package>
