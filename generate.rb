@@ -33,18 +33,14 @@ slug = book_data["slug"] # for convenience, because we will use it many times
 
 # Build directory setup
 
-if Dir.exist?("build/#{slug}")
-  `rm -r build/#{slug}`
+if Dir.exist?("build")
+  `rm -r build`
 end
 
-unless Dir.exist?("build")
-  `mkdir build`
-end
-
-`mkdir build/#{slug}`
-`mkdir build/#{slug}/web`
-`mkdir build/#{slug}/epub`
-`mkdir build/#{slug}/epub/BOOK`
+`mkdir build`
+`mkdir build/web`
+`mkdir build/epub`
+`mkdir build/epub/BOOK`
 
 # These files are annoying, so get rid of them
 
@@ -63,7 +59,7 @@ end
 
 print "Generating web book..."
 
-web_book_build_path = "build/#{slug}/web"
+web_book_build_path = "build/web"
 
 book_body_markdown = File.read("source/#{book_data["markdown_source"]}")
 book_body_html = Kramdown::Document.new(book_body_markdown).to_html
@@ -80,7 +76,7 @@ book_body_html = book_body_html.gsub(/(\w+) (\w+)\<\/a\>/,
 
 # 2. Em dash fixer-upper
 book_body_html = book_body_html.gsub(/(\w+)(—|&mdash;|&#8212;)([\"\”]?)/,
-                                     '<span class="nobr">\1\2\3</span><wbr/>')
+                                     '<span class="nobr">\1\2\3</span>')
 
 # We need a logical map of the HTML to pull out the table of contents:
 
@@ -149,7 +145,7 @@ print " done!\n"
 
 print "Generating epub..."
 
-epub_build_path = "build/#{slug}/epub/BOOK"
+epub_build_path = "build/epub/BOOK"
 
 # The epub's chapter headings don't need to be clikcable, but
 # they do have to have the correct anchor names:
@@ -261,15 +257,15 @@ File.write("#{epub_build_path}/book.opf", epub_opf_html)
 `cp -r source/img #{epub_build_path}`
 `cp -r source/font #{epub_build_path}`
 
-`cp -r source/_epub-template/META-INF build/#{slug}/epub`
-`cp source/_epub-template/mimetype build/#{slug}/epub`
+`cp -r source/_epub-template/META-INF build/epub`
+`cp source/_epub-template/mimetype build/epub`
 
 # And here we actually "create" the epub just by zipping up all these files
 # Note the odd/annoying requirements for the mimetype file:
 # 1. Must be first item in zip archive
 # 2. Must be uncompressed
 
-`cd build/#{slug}/epub;
+`cd build/epub;
  zip -X0 #{slug}.epub mimetype;
  zip -r -u #{slug}.epub META-INF BOOK`
 

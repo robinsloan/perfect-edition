@@ -35,6 +35,6 @@ unless Dir.exist?("build")
 end
 
 server = WEBrick::HTTPServer.new :Port => port
-server.mount "/", NonCachingFileHandler , Dir.pwd + "/build/annabel-scheme-new-golden-gate/web"
+server.mount "/", NonCachingFileHandler , Dir.pwd + "/build/web"
 trap("INT") { server.stop }
 server.start
