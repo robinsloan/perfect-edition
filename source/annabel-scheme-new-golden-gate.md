@@ -1078,4 +1078,4 @@ This e-book's cover uses Bild Compressed, designed by David Jonathan Ross and of
 
 The cover also features two public domain photographs. One is an image of [the Bay Bridge being built](https://www.baybridgeinfo.org/sites/default/files/images_bulk/I0035219A.jpg) in 1936. The other is [Arnold Genthe's photograph](https://www.artic.edu/artworks/65808/san-francisco-earthquake) of the San Francisco earthquake and fire in 1906. The original is presented on the next page.
 
-<img src="img/genthe-fire.png" />
+<img src="img/genthe-fire.png" alt="" />
