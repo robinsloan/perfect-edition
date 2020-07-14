@@ -2,7 +2,7 @@
 
 is an aspirational name for this project, which aims to provide a lean, fast-loading web e-book template with a kind of definitive sturdiness. (I first encountered the term "perfect edition" in the world of manga. I haven't been able to confirm this etymology, but I think it comes from the use of a perfect paperback binding.)
 
-![Animated demo of the template](demo.gif)
+<img src="demo.gif" style="width: 100%; max-width: 100%" alt="Animated demo of the template" />
 
 You can see a live demo of the template [here](https://www.robinsloan.com/book/annabel-scheme-serial/read).
 
@@ -20,7 +20,7 @@ You can see a live demo of the template [here](https://www.robinsloan.com/book/a
 
 ## Goals and principles
 
-I started designing and coding this template because I wasn't satisfied with the other options I found, all of which seemed to offer either too little or too much for my purposes. (I am [a fiction writer](https://www.robinsloan.com/books/).)
+I started designing and coding this template because I wasn't satisfied with the other options I found, all of which seemed to offer either too little or too much for my purposes. ([I am a fiction writer.](https://www.robinsloan.com/books/))
 
 I imagined a web e-book that was *paged*, *selectable*, *lightweight*, and *typographically perfect*.
 
@@ -30,7 +30,13 @@ I imagined a web e-book that was *paged*, *selectable*, *lightweight*, and *typo
 
 **Lightweight:** I mean that both in terms of (1) the e-book's underlying code, so it's possible for one person to "hold it all in their head," and (2) its performance in the browser. It should load instantly and respond without any lag, ever.
 
-**Typographically perfect:** It's amazing what CSS can do these days! There's no reason not to at least *aspire* to typesetting on the level of the best print books.
+**Typographically perfect:** It's amazing what CSS can do these days! A web e-book should at least *aspire* to typesetting on the level of the best print books.
+
+In addition, there's one important "non-goal," which is support for legacy browsers or, indeed, any browsers that don't offer new-ish CSS functions like `calc()` and `clamp()`. This choice is what made it possible for me to contemplate building this at all, and I am sticking to it in the project's public phase.
+
+## Thanks
+
+This project was made possible by 1022 patrons who supported the release of my novella *Annabel Scheme and the Adventure of the New Golden Gate*. The [lo-fi crowdfunding campaign](https://www.robinsloan.com/sloanstarter/) ran for just one week; after it reached its goal, [the novella's web edition](https://www.robinsloan.com/books/annabel-scheme-serial) along with the code underpinning it---this project---became public goods. Thank you, patrons!
 
 ## How to work with this template
 
@@ -38,28 +44,31 @@ You need a computer with Ruby 2.6 or above and either Chrome or Safari. (I'd lik
 
 This project uses a `source` directory and a `build` directory. The `source` directory contains both the e-book template and the e-book text, which is stored in Markdown format.
 
-In the Markdown source, chapters are marked with `h2` tags and full-page "intertitles" are `h1`s. There is no special stylng for blockquotes, lists, or really anything other than paragraph text; that will improve over time---maybe with your help!
+In the Markdown text, chapters are marked with `h2` tags and full-page "intertitles" are `h1`s. There is no special styling for blockquotes, lists, or really anything other than paragraph text. This will improve over time---maybe with your help!
 
-After you clone the project, use these commands:
+After you clone the project, `cd` into the directory and run:
 
 ```
 bundle install
 ruby serve.rb
 ```
 
-That will combine the text with the template to generate the `build` directory, which contains the files you'll actually view in a web browser. (It also generates an EPUB edition of the book, which really isn't the focus of this project, but a feature I needed.)
+That will
 
-You can view the generated web-book at `http://localhost:8000/web-book.html`.
+1. combine the text with the template to generate a finished e-book in a new `build` directory, and
+2. serve that finished e-book, which you can view at `http://localhost:8000/web-book.html`.
 
-To swap out the text, provide your own Markdown file and then edit `book.yaml`. The values there are *mostly* self-explanatory, and those that aren't probably need to be dropped or replaced.
+(The script also generates an EPUB edition, which really isn't the focus of this project, but a feature I needed, so there you go!)
 
-The `serve.rb` script watches the entire `source` directory and, whenever you make a change, regenerates the e-book. So you can
+To swap out the text, provide your own Markdown file and then edit `book.yaml`. The values there are mostly self-explanatory, and those that aren't probably need to be dropped or replaced.
+
+The `serve.rb` script watches the entire `source` directory and, whenever you make a change, regenerates the e-book.
+
+**I think it's important to say:** It is my expectation that this template will be most useful to others not as-is, but instead as a starting point for specific, bespoke designs. Print books look different; that's what makes them great. I think web e-books should look different, too. So, even though I've been calling this a template, I hope it works more as a springboard, or even just a source of code snippets.
 
 ## Work to be done
 
-I'm pleased with what I have here so far, but it's still a long way away from being truly versatile and useful. I'm going to keep working on it regularly, and I invite you to join in; your issues and pull requests are warmly invited.
-
-Here's what's on my to-do list:
+I'm pleased with what I have here so far, but it's still a long way away from being any kind of "perfect edition." I'm going to keep working on it regularly for at least the next few months. Here's what's on my to-do list:
 
 **Make it work in Firefox.** Currently, this template does not work at all in Firefox; currently, I have no idea why. I haven't started researching this yet, but/and I'd welcome any pointers from Firefox aficionados.
 
@@ -67,7 +76,18 @@ Here's what's on my to-do list:
 
 **Rationalize the CSS.** The current styling isn't completely horrible, but it has the clear signature of hasty accretion over time. I'd like to go back and organize the CSS using some clear principles so it's easier to read and understand.
 
+**Add more basic styles.** Lists, blockquotes, etc.
+
 **Improve the typesetting.** I said above that it is the aspiration of this project to be "typographically perfect." Currently it is "typographically competent, mostly," so there's a long way to go.
 
 **Think about HTML vs. JavaScript.** Early versions of this template were breathtakingly minimal, a `<nav>` and a bunch of `<p>`s---it was great. Over time I added other important elements---the TOC display button, the bookmark---and I'm now wondering if they really belong in the HTML source or if I should create and append them in JavaScript. I like the idea of a minimal, logical HTML file; at the same time, I want everything to be available instantly. I'm going to investigate the tradeoffs here.
 
+## An invitation
+
+If this investigation into lightness and long-form reading on the web is interesting to you, I invite you to join in! Your issues---bug reports and enhancement ideas alike---are warmly invited. Pull requests, too.
+
+In particular, this project would benefit from some deep, clear thinking about CSS, so if that's your thing, whew, I could really use your help.
+
+From Oakland,
+
+Robin
