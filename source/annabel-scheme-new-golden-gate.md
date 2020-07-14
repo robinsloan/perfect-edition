@@ -317,7 +317,7 @@ So could we just ... dial the other one, like a cell phone?
 
 Scheme started up the sidewalk, pausing to stuff the coffee carrier into a wastebasket in front of the butcher shop. "Come on, Will," she said. "We're going to see a witch."
 
-## The Sea Witch
+## The Sea-Witch
 
 <small>The Bay Area's greatest detective</small> had deposited one half of a pair of magic earrings into the boxy and fashionable bag of a visitor from another world, the unflappable Lois. The earrings were, by long association, linked---even between branches of reality.
 
@@ -325,7 +325,7 @@ Could Annabel Scheme reconnect them?
 
 "I never figured that part out," she admitted. Scheme maintained a stockpile of stratagems half-figured-out. So far, it seemed to have served her well. "That's why we need Carlotta. She's my witch friend."
 
-We tore across the Richmond Bridge in Scheme's electric pickup. I saw San Quentin College jutting out into the bay. Was there a San Quentin in Lois' world? Or was it something else on that litte point of land? Was there a Golden Gate Bridge? Surely, there had to be a Golden Gate Bridge.
+We tore across the Richmond Bridge in Scheme's electric pickup. I saw San Quentin College jutting out into the bay. Was there a San Quentin in Lois's world? Or did something sit on that litte point of land? Was there a Golden Gate Bridge? Surely, there had to be a Golden Gate Bridge.
 
 Scheme took us zooming across Sir Francis Drake to Nicasio Valley Road. Before us, the jagged reservoir seemed to float, clouds nearly kissing their reflections in the water. We curled back down to Point Reyes Station, then continued up the shore. A colony of gulls swirled above Tomales Bay.
 
