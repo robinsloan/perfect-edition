@@ -2,7 +2,7 @@
 
 is an aspirational name for this project, which aims to provide a lean, fast-loading web e-book template with a kind of definitive sturdiness. (I first encountered the term "perfect edition" in the world of manga. I haven't been able to confirm this etymology, but I think it comes from the use of a perfect paperback binding.)
 
-<img src="demo.gif" style="width: 100%; max-width: 100%" alt="Animated demo of the template" />
+<img src="demo.gif" style="width: 100%" alt="Animated demo of the template" />
 
 You can see a live demo of the template [here](https://www.robinsloan.com/books/annabel-scheme-serial/read).
 
