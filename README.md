@@ -64,6 +64,8 @@ To swap out the text, provide your own Markdown file and then edit `book.yaml`. 
 
 The `serve.rb` script watches the entire `source` directory and, whenever you make a change, regenerates the e-book.
 
+If you'd like to generate the e-book without starting a web server, you can just run `ruby generate.rb`.
+
 **I think it's important to say:** It is my expectation that this template will be most useful to others not as-is, but instead as a starting point for specific, bespoke designs. Print books look different; that's what makes them great. I think web e-books should look different, too. So, even though I've been calling this a template, I hope it works more as a springboard, or even just a source of code snippets.
 
 ## Work to be done
@@ -72,7 +74,7 @@ I'm pleased with what I have here so far, but it's still a long way away from be
 
 **Make it work in Firefox.** Currently, this template does not work at all in Firefox; currently, I have no idea why. I haven't started researching this yet, but/and I'd welcome any pointers from Firefox aficionados.
 
-**Make it work for other languages.** My development of this template has been, so far, painfully parochial, limited to the English-language text of my own novella. I want to engineer support for (and provide demo documents in) first non-English left-to-right scripts, and eventually right-to-left scripts, too. I am a little bit afraid of what this will reveal about the brittleness of the code.
+**Make it work for other languages.** My development of this template has been, so far, painfully parochial, limited to the English-language text of my own novella. I want to engineer support for (and provide demo documents in) first non-English left-to-right scripts, and eventually right-to-left scripts, too. I am deeply afraid of the things this will reveal about the brittleness of the code 😬
 
 **Rationalize the CSS.** The current styling isn't completely horrible, but it has the clear signature of hasty accretion over time. I'd like to go back and organize the CSS using some clear principles so it's easier to read and understand.
 
@@ -80,7 +82,7 @@ I'm pleased with what I have here so far, but it's still a long way away from be
 
 **Improve the typesetting.** I said above that it is the aspiration of this project to be "typographically perfect." Currently it is "typographically competent, mostly," so there's a long way to go.
 
-**Think about HTML vs. JavaScript.** Early versions of this template were breathtakingly minimal, a `<nav>` and a bunch of `<p>`s---it was great. Over time I added other important elements---the TOC display button, the bookmark---and I'm now wondering if they really belong in the HTML source or if I should create and append them in JavaScript. I like the idea of a minimal, logical HTML file; at the same time, I want everything to be available instantly. I'm going to investigate the tradeoffs here.
+**Think about HTML vs. JavaScript.** Early versions of this template were breathtakingly minimal, a `<nav>` and a bunch of `<p>`s---it was great. Over time I added other important elements---the TOC display button, the bookmark---and I'm now wondering if they really belong in the HTML source or if I should create and append those elements in JavaScript. I like the idea of a minimal, logical HTML file; at the same time, I want everything to be available instantly. I'm going to look at the tradeoffs here.
 
 ## An invitation
 

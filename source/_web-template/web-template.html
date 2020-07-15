@@ -179,7 +179,7 @@ Kobayashi Issa
                                   return heading.getAttribute("id") == editedAnchor;
                                 } );
 
-    anchoredHeading.scrollIntoViewIfNeeded();
+    anchoredHeading.scrollIntoView();
 
     let wherePageEdgeShouldBe = ( window.innerWidth - bookElement.getBoundingClientRect().width ) / 2.0;
     let offset = anchoredHeading.getBoundingClientRect().x - wherePageEdgeShouldBe;
