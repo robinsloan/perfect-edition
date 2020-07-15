@@ -8,7 +8,7 @@ You can see a live demo of the template [here](https://www.robinsloan.com/books/
 
 ## What it is
 
-* a web e-book template that works in some (soon: all) browsers
+* a web e-book template that works in modern browsers
 * a tool to generate a nice web edition and robust EPUB edition from the same text
 * suitable for fiction and other straight-through prose
 
@@ -40,7 +40,7 @@ This project was made possible by 1022 patrons who supported the release of my n
 
 ## How to work with this template
 
-You need a computer with Ruby 2.6 or above and either Chrome or Safari. (I'd like this to say "any web browser" as soon as possible. Sorry, Firefox users!)
+You need a computer with Ruby 2.6 or above and a modern browser.
 
 This project uses a `source` directory and a `build` directory. The `source` directory contains both the e-book template and the e-book text, which is stored in Markdown format.
 
@@ -72,7 +72,7 @@ If you'd like to generate the e-book without starting a web server, you can just
 
 I'm pleased with what I have here so far, but it's still a long way away from being any kind of "perfect edition." I'm going to keep working on it regularly for at least the next few months. Here's what's on my to-do list:
 
-**Make it work in Firefox.** Currently, this template does not work at all in Firefox; currently, I have no idea why. I haven't started researching this yet, but/and I'd welcome any pointers from Firefox aficionados.
+~~**Make it work in Firefox.** Currently, this template does not work at all in Firefox; currently, I have no idea why.~~ Note: This actually works better in Firefox than I realized. I unwittingly had a decrepit version installed 😅
 
 **Make it work for other languages.** My development of this template has been, so far, painfully parochial, limited to the English-language text of my own novella. I want to engineer support for (and provide demo documents in) first non-English left-to-right scripts, and eventually right-to-left scripts, too. I am deeply afraid of the things this will reveal about the brittleness of the code 😬
 
