@@ -1,0 +1,5 @@
+# Ignore Gemfile.lock
+Gemfile.lock
+
+# Ignore build folder
+build

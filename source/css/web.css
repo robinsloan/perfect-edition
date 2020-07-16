@@ -34,7 +34,21 @@
 }
 
 :root {
-  --base-unit: clamp(28px, 5vh, 56px); /* used to be vw, but vh works better */
+  /* Baseline defaults for all devices */
+  --base-unit: 5vh;
+  --column-width: 50vw;
+}
+
+@supports (width: clamp(28px, 5vh, 56px)) {
+  :root {
+    /* Baseline defaults for all devices and browsers that support clamp() */
+    /* Edge Chromium on Android has an issue with supporting clamp() for widths */
+    --base-unit: clamp(28px, 5vh, 56px);
+    --column-width: clamp(480px, 50vw, 640px);
+  }
+}
+
+:root {
   --base-unit-half: calc( var(--base-unit) / 2.0 );
 
   --font-size: var(--base-unit-half);
@@ -43,7 +57,6 @@
 
   --vertical-padding: var(--base-unit);
 
-  --column-width: clamp(480px, 50vw, 640px);
     /* this 4.0 is a bit cryptic; we are making space for the toc button:; */
   --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
   --column-gap: var(--base-unit);
