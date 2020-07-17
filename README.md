@@ -4,7 +4,7 @@ is an aspirational name for this project, which aims to provide a lean, fast-loa
 
 <img src="demo.gif" style="width: 100%" alt="Animated demo of the template" />
 
-You can see a live demo of the template [here](https://www.robinsloan.com/books/annabel-scheme-serial/read).
+You can see a live, current-ish demo of the template [here](https://robinsloan.github.io/perfect-edition/build/web/index.html).
 
 ## What it is
 
