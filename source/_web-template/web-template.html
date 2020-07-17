@@ -241,6 +241,13 @@ Kobayashi Issa
       e.stopPropagation();
     });
 
+    // cross button
+
+    document.querySelector(".cross-button").addEventListener("click", e => {
+      toggleNav();
+      e.stopPropagation();
+    });
+
     // toc text size buttons
 
     document.querySelectorAll("nav div.controls button").forEach(button => {
@@ -373,6 +380,7 @@ Kobayashi Issa
 
 <div class="toc">
 <h1>Table of Contents</h1>
+<span class="cross-button">˟</span>
 {{ web_toc_html }}
 </div>
 </nav>
