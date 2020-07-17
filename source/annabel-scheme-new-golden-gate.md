@@ -325,7 +325,7 @@ Could Annabel Scheme reconnect them?
 
 "I never figured that part out," she admitted. Scheme maintained a stockpile of stratagems half-figured-out. So far, it seemed to have served her well. "That's why we need Carlotta. She's my witch friend."
 
-We tore across the Richmond Bridge in Scheme's electric pickup. I saw San Quentin College jutting out into the bay. Was there a San Quentin in Lois's world? Or did something sit on that litte point of land? Was there a Golden Gate Bridge? Surely, there had to be a Golden Gate Bridge.
+We tore across the Richmond Bridge in Scheme's electric pickup. I saw San Quentin College jutting out into the bay. Was there a San Quentin in Lois's world? Or did something sit on that little point of land? Was there a Golden Gate Bridge? Surely, there had to be a Golden Gate Bridge.
 
 Scheme took us zooming across Sir Francis Drake to Nicasio Valley Road. Before us, the jagged reservoir seemed to float, clouds nearly kissing their reflections in the water. We curled back down to Point Reyes Station, then continued up the shore. A colony of gulls swirled above Tomales Bay.
 
@@ -692,7 +692,7 @@ We stalked the building's first level, where most of the doors were all open, re
 
 The only sound was the rustling of bodies and, from somewhere above, the muffled boom of a yerbacore beat. As Scheme pressed further in, the teens swiveled to track our passage. Their youth cascaded across their mouths in perfect sync.
 
-We found the kitchen, and beyond the kitchen---surprisingly tidy---we found a long room filled with the the detritus of the building's former inhabitants. Old ergonomic chairs. Filing cabinets. Dead monitors. The floor was thick with cables; they ran in loops and tangles toward a door at the room's far end. We stepped lightly.
+We found the kitchen, and beyond the kitchen---surprisingly tidy---we found a long room filled with the detritus of the building's former inhabitants. Old ergonomic chairs. Filing cabinets. Dead monitors. The floor was thick with cables; they ran in loops and tangles toward a door at the room's far end. We stepped lightly.
 
 The door was half-open, as casual as the rest of Basilisk House, and it revealed a large storage closet where the cables found their destination, a rack of whirring, blinking servers. Beside the rack was a mini fridge and beside the mini fridge was a small desk, where a figure slouched in an ergonomic chair.
 
