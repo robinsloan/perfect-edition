@@ -189,14 +189,17 @@ nav div.toc {
   position: relative;
 }
 
-nav span.cross-button {
-  position: absolute;
-  right: 0.5rem;
-  top: 1.25rem;
-  font-size: 2rem;
+nav div.close-button {
+  position: fixed;
+  top: calc( var(--vertical-padding) + var(--base-unit) + var(--base-unit));
+  right: calc( 50vw + var(--base-unit) - var(--column-width) * 0.45);
+  width: var(--base-unit-half);
+  height: var(--base-unit-half);
+  stroke: var(--spot-color);
+  stroke-width: 1px;
 }
 
-nav span.cross-button:hover {
+nav div.close-button:hover {
   cursor: pointer;
 }
 

@@ -243,7 +243,7 @@ Kobayashi Issa
 
     // cross button
 
-    document.querySelector(".cross-button").addEventListener("click", e => {
+    document.querySelector("div.close-button").addEventListener("click", e => {
       toggleNav();
       e.stopPropagation();
     });
@@ -380,7 +380,14 @@ Kobayashi Issa
 
 <div class="toc">
 <h1>Table of Contents</h1>
-<span class="cross-button">˟</span>
+<div class="close-button">
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 10 10" xml:space="preserve">
+  <g>
+    <line x1="0" y1="0" x2="10" y2="10" vector-effect="non-scaling-stroke" />
+    <line x1="10" y1="0" x2="0" y2="10" vector-effect="non-scaling-stroke" />
+  </g>
+</svg>
+</div>
 {{ web_toc_html }}
 </div>
 </nav>
@@ -419,13 +426,13 @@ Kobayashi Issa
 <button id="toc-button">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 80 40" xml:space="preserve">
   <g>
-    <rect x="0" y="10" width="5" height="1"/>
-    <rect x="0" y="20" width="5" height="1"/>
-    <rect x="0" y="30" width="5" height="1"/>
+    <rect x="0" y="10" width="5" height="1" />
+    <rect x="0" y="20" width="5" height="1" />
+    <rect x="0" y="30" width="5" height="1" />
 
-    <rect x="10" y="10" width="70" height="1"/>
-    <rect x="10" y="20" width="70" height="1"/>
-    <rect x="10" y="30" width="70" height="1"/>
+    <rect x="10" y="10" width="70" height="1" />
+    <rect x="10" y="20" width="70" height="1" />
+    <rect x="10" y="30" width="70" height="1" />
   </g>
 </svg>
 </button>
