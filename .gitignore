@@ -1,5 +1,9 @@
-# Ignore Gemfile.lock
+# Ruby stuff
 Gemfile.lock
+.bundle
 
-# Ignore build folder
+# generated build folder
 build
+
+# macOS
+.DS_Store
