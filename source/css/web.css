@@ -186,6 +186,18 @@ nav div.toc {
 
   overflow-x: hidden;
   overflow-y: scroll;
+  position: relative;
+}
+
+nav span.cross-button {
+  position: absolute;
+  right: 0.5rem;
+  top: 1.25rem;
+  font-size: 2rem;
+}
+
+nav span.cross-button:hover {
+  cursor: pointer;
 }
 
 nav div.controls {
