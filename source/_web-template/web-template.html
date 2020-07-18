@@ -162,7 +162,7 @@ Kobayashi Issa
     writePageNumber(pageNumber);
 
     // the cute tiny bookmark
-    let bookmarkElement = document.querySelector("div#bookmark");
+    let bookmarkElement = document.querySelector("div.bookmark");
     bookmarkElement.style.display = "block";
     // bookmarkElement.style.top = `0px`;
     bookmarkElement.style.left = `${pageEdge + columnWidth / 2.0}px`;
@@ -236,7 +236,7 @@ Kobayashi Issa
 
     // toc button
 
-    document.querySelector("#toc-button").addEventListener("click", e => {
+    document.querySelector("button.toc-button").addEventListener("click", e => {
       toggleNav();
       e.stopPropagation();
     });
@@ -411,7 +411,7 @@ Kobayashi Issa
 {{ web_book_body_html }}
 <p class="last-page"></p>
 
-<div id="bookmark">
+<div class="bookmark">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 40 80" xml:space="preserve">
   <g>
     <polygon points="0,0 0,80 20,70 40,80 40,0"/>
@@ -423,7 +423,7 @@ Kobayashi Issa
 
 <div class="shadow-page-container"></div>
 
-<button id="toc-button">
+<button class="toc-button">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 80 40" xml:space="preserve">
   <g>
     <rect x="0" y="10" width="5" height="1" />

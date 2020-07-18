@@ -66,6 +66,7 @@
   --paper-lightness: 99%;
   --paper-color: hsla( var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 1.0 );
 
+  /* these are for the "shades" that obscure text on the sides of the screen in wider browsers */
   --shade-color-destination: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.0);
   --shade-color-origin: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.75);
 
@@ -79,11 +80,21 @@
 ::-moz-selection { background: var(--selection-color); }
 ::selection { background: var(--selection-color); }
 
+/* reset */
+button {
+  outline: none;
+  border: none;
+  background: none;
+  background-color: transparent;
+  touch-action: manipulation;
+}
+
 html {
   overflow: hidden; /* the key, always */
   font-size: var(--font-size);
   scroll-behavior: smooth;
 
+  /* ss11 gives us the more normal 1 digit */
   font-feature-settings: "kern", "liga", "ss11";
 }
 
@@ -133,12 +144,32 @@ div.tutorial p {
   margin-bottom: var(--line-height);
 }
 
-button {
-  outline: none;
-  border: none;
-  background: none;
-  background-color: transparent;
-  touch-action: manipulation;
+button.toc-button {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+
+  left: 50vw;
+
+  flex-direction: column;
+  justify-content: center;
+
+  z-index: 100000;
+  width: calc( var(--base-unit) * 2.0 );
+  height: var(--base-unit);
+
+  border: 1px solid var(--text-color);
+  background-color: var(--paper-color);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+button.toc-button:hover {
+  border: 1px solid var(--spot-color);
+  fill: var(--spot-color);
+}
+
+button.toc-button svg {
+  flex-grow: 1;
 }
 
 nav {
@@ -280,35 +311,7 @@ nav ol li:last-of-type {
   margin: 0 0 0 0;
 }
 
-button#toc-button {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-
-  left: 50vw;
-
-  flex-direction: column;
-  justify-content: center;
-
-  z-index: 100000;
-  width: calc( var(--base-unit) * 2.0 );
-  height: var(--base-unit);
-
-  border: 1px solid var(--text-color);
-  background-color: var(--paper-color);
-  transform: translateX(-50%) translateY(-50%);
-}
-
-button#toc-button:hover {
-  border: 1px solid var(--spot-color);
-  fill: var(--spot-color);
-}
-
-button#toc-button svg {
-  flex-grow: 1;
-}
-
-div#bookmark {
+div.bookmark {
   display: none;
   position: absolute;
   z-index: 100000;
@@ -323,64 +326,7 @@ div#bookmark {
   /* computers... */
 }
 
-div.book div.title {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  width: var(--column-width);
-  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
-
-  text-align: center;
-  /* break-after: column; */
-}
-
-div.book div.title h1 {
-  height: auto;
-
-  flex-grow: 0;
-  margin: 0;
-  padding: 0;
-  text-transform: lowercase;
-  line-height: calc( var(--line-height) * 2.0 );
-
-  font-size: 2rem;
-  font-weight: 500;
-  font-variant: small-caps;
-  font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "smcp", "ss11";
-
-  color: var(--text-color);
-}
-
-div.book div.title h1 span {
-  display: block;
-}
-
-div.book div.title h2 {
-  flex-grow: 0;
-  margin-top: var(--line-height);
-}
-
-div.book h1 {
-  height: calc( var(--column-height) - 1px);
-
-  margin: 0;
-  padding: 0;
-  text-transform: lowercase;
-  line-height: var(--column-height);
-
-  font-size: 2rem;
-  font-weight: 500;
-  font-variant: small-caps;
-  font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "smcp", "ss11";
-
-  color: var(--spot-color);
-
-  text-align: center;
-  break-before: column;
-}
+/* GENERAL STYLES */
 
 h2 {
   margin: calc( var(--line-height) * 6.0 ) 0 calc( var(--line-height) * 2.0 ) 0;
@@ -397,116 +343,8 @@ a, a:link, a:visited {
   color: var(--spot-color);
 }
 
-a:hover, h2 a:active {
+a:hover, a:active {
   color: var(--text-color);
-}
-
-blockquote {
-  margin: 0;
-  background-color: rgba(0, 0, 0, 0.125);
-  padding: var(--base-unit);
-  font-style: italic;
-  break-before: avoid-column;
-}
-
-div.book {
-  position: relative;
-
-  scroll-snap-align: start;
-  column-gap: var(--base-unit);
-  column-fill: auto;
-  column-count: auto;
-  column-width: var(--column-width);
-
-  margin: var(--base-unit-half);
-  width: var(--column-width); /* must match column-width, or am fucked */
-
-  height: var(--column-height);
-
-  /*
-  -webkit-perspective: 1;
-  perspective: 1;
-  */
-}
-
-/* an interesting approach to this */
-/* https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c */
-
-div.shadow-page-container {
-  display: none;
-  position: relative;
-  /* margin: var(--base-unit-half); */
-  width: calc( 100vw * var(--page-count));
-}
-
-div.shadow-page {
-  background-color: transparent;
-  float: left;
-  height: 1px;
-  margin-left: 0;
-  margin-right: var(--column-gap);
-  width: var(--column-width);
-  scroll-snap-align: start;
-  position: relative;
-  z-index: -10;
-}
-
-
-div.shade {
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
-  height: 100vh;
-}
-
-/* love you, pseudo elements! */
-/* these are the book's "shades" */
-/* for svg encoding: https://yoksel.github.io/url-encoder/ */
-
-/*svg original:
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 60 90" xml:space="preserve">
-  <g>
-    <rect x="0" y="0" width="60" height="90" style="fill: rgba(255, 255, 255, 0.75);" />
-    <polygon points="30,45 60,30 60,60" style="fill: rgba(0, 0, 0, 0.125);" />
-  </g>
-</svg>
-*/
-
-div.book::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
-  height: 100vh;
-
-  /* specific to left shade */
-  left: 0;
-  background: linear-gradient(to right,
-                              var(--shade-color-origin) 0%,
-                              var(--shade-color-origin) 95%,
-                              var(--shade-color-destination) 100%);
-
-  /* i just don't think this is necessary...
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='100%25' height='100%25' viewBox='0 0 60 90' xml:space='preserve'%3E%3Cg%3E%3Crect x='0' y='0' width='60' height='90' style='fill: rgba(255, 255, 255, 0.75);' /%3E%3Cpolygon points='30,45 60,30 60,60' style='fill: rgba(0, 0, 0, 0.125);' /%3E%3C/g%3E%3C/svg%3E");
-  */
-}
-
-div.book::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
-  height: 100vh;
-
-  /* specific to right shade */
-  right: 0;
-  background: linear-gradient(to left,
-                              var(--shade-color-origin) 0%,
-                              var(--shade-color-origin) 95%,
-                              var(--shade-color-destination) 100%);
 }
 
 p {
@@ -572,8 +410,168 @@ p.last-page::after {
   content: "";
 }
 
-/* print stuff */
-/* this is sort of a mess... */
+blockquote {
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.125);
+  padding: var(--base-unit);
+  font-style: italic;
+  break-before: avoid-column;
+}
+
+/* BOOK BLOCK LAYOUT */
+
+div.book {
+  position: relative;
+
+  scroll-snap-align: start;
+  column-gap: var(--base-unit);
+  column-fill: auto;
+  column-count: auto;
+  column-width: var(--column-width);
+
+  margin: var(--base-unit-half);
+  width: var(--column-width); /* must match column-width, or am fucked */
+
+  height: var(--column-height);
+}
+
+div.book div.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: var(--column-width);
+  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
+
+  text-align: center;
+  /* break-after: column; */
+}
+
+div.book div.title h1 {
+  height: auto;
+
+  flex-grow: 0;
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  line-height: calc( var(--line-height) * 2.0 );
+
+  font-size: 2rem;
+  font-weight: 500;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
+
+  color: var(--text-color);
+}
+
+div.book div.title h1 span {
+  display: block;
+}
+
+div.book div.title h2 {
+  flex-grow: 0;
+  margin-top: var(--line-height);
+}
+
+div.book h1 {
+  height: calc( var(--column-height) - 1px);
+
+  margin: 0;
+  padding: 0;
+  text-transform: lowercase;
+  line-height: var(--column-height);
+
+  font-size: 2rem;
+  font-weight: 500;
+  font-variant: small-caps;
+  font-variant-caps: small-caps;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
+
+  color: var(--spot-color);
+
+  text-align: center;
+  break-before: column;
+}
+
+/* these are the "shades" that obscure text on the sides of the screen in wider browsers */
+
+/* originally, I had some SVG arrows hanging around but I don't think they're necessary */
+
+/* for svg encoding: https://yoksel.github.io/url-encoder/ */
+/* thus, commented out */
+
+/*svg original:
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 60 90" xml:space="preserve">
+  <g>
+    <rect x="0" y="0" width="60" height="90" style="fill: rgba(255, 255, 255, 0.75);" />
+    <polygon points="30,45 60,30 60,60" style="fill: rgba(0, 0, 0, 0.125);" />
+  </g>
+</svg>
+*/
+
+div.book::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
+  height: 100vh;
+
+  /* specific to left shade */
+  left: 0;
+  background: linear-gradient(to right,
+                              var(--shade-color-origin) 0%,
+                              var(--shade-color-origin) 95%,
+                              var(--shade-color-destination) 100%);
+
+  /* i just don't think this is necessary...
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='100%25' height='100%25' viewBox='0 0 60 90' xml:space='preserve'%3E%3Cg%3E%3Crect x='0' y='0' width='60' height='90' style='fill: rgba(255, 255, 255, 0.75);' /%3E%3Cpolygon points='30,45 60,30 60,60' style='fill: rgba(0, 0, 0, 0.125);' /%3E%3C/g%3E%3C/svg%3E");
+  */
+}
+
+div.book::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
+  height: 100vh;
+
+  /* specific to right shade */
+  right: 0;
+  background: linear-gradient(to left,
+                              var(--shade-color-origin) 0%,
+                              var(--shade-color-origin) 95%,
+                              var(--shade-color-destination) 100%);
+}
+
+/* TO MAKE SNAP-SCROLL WORK ON MOBILE */
+
+/* inspiration:
+   https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c */
+
+div.shadow-page-container {
+  display: none;
+  position: relative;
+  /* margin: var(--base-unit-half); */
+  width: calc( 100vw * var(--page-count));
+}
+
+div.shadow-page {
+  background-color: transparent;
+  float: left;
+  height: 1px;
+  margin-left: 0;
+  margin-right: var(--column-gap);
+  width: var(--column-width);
+  scroll-snap-align: start;
+  position: relative;
+  z-index: -10;
+}
+
+/* PRINT STYLES */
+/* this is a mess... */
 
 div.print-cover {
   display: none;
@@ -618,7 +616,7 @@ div.print-cover div.title h2 {
   margin-top: var(--line-height);
 }
 
-/* media queries */
+/* RESPONSIVE STUFF */
 
 @media screen and (max-width: 640px) {
 
@@ -664,7 +662,7 @@ div.print-cover div.title h2 {
     --vertical-padding: calc( var(--base-unit) * 2.0 );
   }
 
-  div#bookmark {
+  div.bookmark {
     top: calc( var(--vertical-padding) * -1.5 ); /* now THAT is a stupid magic number */
   }
 
@@ -673,11 +671,13 @@ div.print-cover div.title h2 {
 @media print {
 
   html {
+    width: 100%;
     overflow: auto;
-    font-size: 12pt;
+    font-size: 16pt;
+    overflow: visible !important; /* BLERF this fixed a lot of my print style woes */
   }
 
-  div.book::before, div.book::after, nav, button#toc-button, img.cover, div.last-page, div#bookmark, div.tutorial {
+  div.book::before, div.book::after, nav, button.toc-button, img.cover, div.last-page, div.bookmark, div.tutorial {
     display: none;
   }
 
@@ -686,12 +686,11 @@ div.print-cover div.title h2 {
   }
 
   @page {
-    /* surely i should be able to set this lower and have it still work? i am confused */
-
-    margin: 2in;
+    margin: 1.5in;
   }
 
   body {
+    width: 100%;
     height: auto;
     overflow-x: auto;
     overflow-y: auto;
@@ -707,12 +706,12 @@ div.print-cover div.title h2 {
   div.book {
 
     /* i really wanted columns to work for printing but... they do not */
-    column-count: 1;
+    column-count: 0;
     column-width: auto;
     column-gap: 0;
     column-fill: auto;
 
-    columns: none;
+    columns: 100% 1;
 
     margin: 0;
     width: 100%;
@@ -725,9 +724,6 @@ div.print-cover div.title h2 {
     column-fill: auto;
     */
 
-    text-align: left;
-    orphans: 2;
-    widows: 2;
   }
 
   h2 {
