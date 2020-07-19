@@ -91,6 +91,7 @@ epub_book = book.clone
 # This variable holds the "logical TOC" we pull out of the markdown
 
 toc_items = []
+toc_duplicate_tracker = {}
 
 # (Personally, I like treating the markdown as the "source of truth" and
 # generating everything else from it.)
@@ -99,13 +100,23 @@ book.css("h2").each do |heading|
   # This is a version of the title suitable for use in an anchor tag:
   href_title = heading.inner_html.gsub(/\W/, "_").downcase
 
+  if toc_duplicate_tracker[href_title]
+    toc_duplicate_tracker[href_title] += 1
+    href_title += "_#{toc_duplicate_tracker[href_title].to_s}"
+  else
+    toc_duplicate_tracker[href_title] = 1
+  end
+
   # If the href has already been seen, add a count to the end
+=begin
   if toc_items.collect { |item| item[:href_title] }.include? href_title
+    puts "dup!"
     dups = toc_items.find_all do |item|
       item[:href_title].start_with? href_title
     end
     href_title = "#{href_title}-#{dups.length}"
   end
+=end
 
   toc_items << {:title => heading.inner_html, :href_title => href_title}
 
