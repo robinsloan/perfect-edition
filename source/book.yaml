@@ -15,3 +15,5 @@ home_url: "https://www.robinsloan.com/book/annabel-scheme-new-golden-gate"
 cover_image: "img/scheme-cover-web.png"
 markdown_source: annabel-scheme-new-golden-gate.md
 spot_color: "rgb( 192, 54, 44)"
+use_twitter_card: true
+twitter_username: "@robinsloan"

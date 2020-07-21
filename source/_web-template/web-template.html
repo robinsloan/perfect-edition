@@ -21,17 +21,17 @@ Kobayashi Issa
   <meta property="og:site_name" content="{{ title }} by {{ author }}" />
   <meta property="og:type" content="book" />
   <meta property="og:book:author" content="{{ author }}" />
-  <meta property="og:image" content="{{ cover_image }}" />
+  <meta property="og:image" content="{{ home_url }}{{ cover_image }}" />
   <meta property="og:description" content="{{ description }}" />
   <meta property="og:url" content="{{ home_url }}" />
 
-  {% if twitter %}
+  {% if use_twitter_card %}
   <!-- Twitter Card metadata -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="{{ twitter }}" />
+  <meta name="twitter:site" content="{{ twitter_username }}" />
   <meta name="twitter:title" content="{{ title }} by {{ author }}" />
   <meta name="twitter:description" content="{{ description }}" />
-  <meta name="twitter:image" content="{{ cover_image }}" />
+  <meta name="twitter:image" content="{{ home_url }}{{ cover_image }}" />
   {% endif %}
 
   <!-- JSON-LD metadata -->

@@ -29,6 +29,11 @@ book_data = YAML.load(File.read("source/book.yaml"))
 
 book_data["modified_date"] = DateTime.now.strftime("%Y-%m-%dT%H:%M:%SZ")
 book_data["guid"] = SecureRandom.alphanumeric(12)
+
+unless book_data["home_url"][-1] == "/"
+  book_data["home_url"] += "/"
+end
+
 slug = book_data["slug"] # for convenience, because we will use it many times
 
 # Build directory setup
@@ -149,7 +154,7 @@ web_book_full_template = Liquid::Template.parse(File.read("source/_web-template/
 
 web_book_full_html = normalize_html( web_book_full_template.render( book_data ) )
 
-File.write("#{web_book_build_path}/web-book.html", web_book_full_html)
+File.write("#{web_book_build_path}/index.html", web_book_full_html)
 
 # And finally, copy the static / uncompiled files
 
