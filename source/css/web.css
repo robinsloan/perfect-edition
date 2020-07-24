@@ -185,11 +185,31 @@ button.toc-button svg {
 nav {
   position: fixed;
 
+  top: 0;
+  left: 0;
+
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+
+  background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 0.7);
+
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  text-align: left;
+
+  transition: opacity 0.1s;
+}
+
+nav #nav-contents {
+  position: fixed;
+
   top: calc( var(--vertical-padding) + var(--base-unit) );
   /* the toc is 90% of the page's width */
   left: calc( 50vw - var(--column-width) * 0.45);
 
-  z-index: 10000;
+  z-index: 10001;
   /* this is all a little bit stupid and I'm sure there's a more
   principled way to do it */
   width: calc( var(--column-width) * 0.9 );
@@ -219,7 +239,7 @@ nav.invisible {
   pointer-events: none;
 }
 
-nav div.toc {
+#nav-contents div.toc {
   width: calc( var(--column-width) * 0.9 );
   height: calc( var(--column-height) - var(--base-unit) * 2.0 );
 
@@ -230,7 +250,7 @@ nav div.toc {
   position: relative;
 }
 
-nav div.close-button {
+#nav-contents div.close-button {
   position: fixed;
   top: calc( var(--vertical-padding) + var(--base-unit) + var(--base-unit));
   right: calc( 50vw + var(--base-unit) - var(--column-width) * 0.45);
@@ -240,11 +260,11 @@ nav div.close-button {
   stroke-width: 1px;
 }
 
-nav div.close-button:hover {
+#nav-contents div.close-button:hover {
   cursor: pointer;
 }
 
-nav div.controls {
+#nav-contents div.controls {
   display: flex;
   position: fixed;
 
@@ -268,7 +288,7 @@ nav div.controls {
   z-index: 100000;
 }
 
-nav div.controls button {
+#nav-contents div.controls button {
   flex-shrink: 0;
 
   margin: 0 var(--base-unit-half) 0 0;
@@ -284,15 +304,15 @@ nav div.controls button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
-nav div.controls button:last-child {
+#nav-contents div.controls button:last-child {
   margin: 0 0 0 0;
 }
 
-nav div.controls button:hover {
+#nav-contents div.controls button:hover {
   color: var(--text-color);
 }
 
-nav h1 {
+#nav-contents h1 {
   margin: 0 0 var(--line-height) 0;
   width: calc( var(--column-width) * 0.9 - calc( var(--base-unit) * 2.0 ) );
   padding: 0;
@@ -303,7 +323,7 @@ nav h1 {
   font-weight: 400;
 }
 
-nav ol {
+#nav-contents ol {
   margin: 0;
   width: 90%;
   padding: 0;
@@ -311,13 +331,13 @@ nav ol {
   margin-bottom: var(--line-height);
 }
 
-nav ol li {
+#nav-contents ol li {
   margin: 0 0 var(--line-height) 0;
   line-height: var(--line-height);
   font-size: 1rem;
 }
 
-nav ol li:last-of-type {
+#nav-contents ol li:last-of-type {
   margin: 0 0 0 0;
 }
 

@@ -266,22 +266,29 @@ Kobayashi Issa
     }
 
     // toc button
-
     document.querySelector("button.toc-button").addEventListener("click", e => {
       toggleNav();
       e.stopPropagation();
     });
 
     // cross button
-
     document.querySelector("div.close-button").addEventListener("click", e => {
+      toggleNav();
+      e.stopPropagation();
+    });
+
+    // scrim behind nav
+    document.querySelector("nav").addEventListener("click", e => {
+      if (e.target.nodeName.toUpperCase() !== "NAV" ) {
+        return; // clicked a child, not the scrim
+      }
       toggleNav();
       e.stopPropagation();
     });
 
     // toc text size buttons
 
-    document.querySelectorAll("nav div.controls button").forEach(button => {
+    document.querySelectorAll("#nav-contents div.controls button").forEach(button => {
       let size = `${baseFontSize * button.dataset.scale}px`;
       button.style.fontSize = size;
 
@@ -300,7 +307,7 @@ Kobayashi Issa
                                 .replace("px", "") );
       console.log(`real font size detected: ${realFontSize}px`);
 
-      document.querySelectorAll("nav div.controls button").forEach(button => {
+      document.querySelectorAll("#nav-contents div.controls button").forEach(button => {
         let size = `${realFontSize * button.dataset.scale}px`;
         button.style.fontSize = size;
 
@@ -367,6 +374,11 @@ Kobayashi Issa
       return;
     }
 
+    // don't advance if nav is visible
+    if (navElement.className == "visible") {
+      return;
+    }
+
     lastClick = now;
 
     // don't advance on link click
@@ -401,6 +413,7 @@ Kobayashi Issa
 <body>
 
 <nav class="invisible">
+<div id="nav-contents">
 <div class="controls">
   <button data-scale="0.8">A</button>
   <button data-scale="1.0">A</button>
@@ -420,6 +433,7 @@ Kobayashi Issa
 </svg>
 </div>
 {{ web_toc_html }}
+</div>
 </div>
 </nav>
 
