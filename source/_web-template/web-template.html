@@ -278,8 +278,8 @@ Kobayashi Issa
     });
 
     // scrim behind nav
-    document.querySelector("nav").addEventListener("click", e => {
-      if (e.target.nodeName.toUpperCase() !== "NAV" ) {
+    navElement.addEventListener("click", e => {
+      if (e.target.nodeName.toUpperCase() !== navElement.nodeName.toUpperCase()) {
         return; // clicked a child, not the scrim
       }
       toggleNav();
