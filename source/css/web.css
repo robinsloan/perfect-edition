@@ -69,8 +69,9 @@
   /* these are for the "shades" that obscure text on the sides of the screen in wider browsers */
   --shade-color-destination: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.0);
   --shade-color-origin: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.75);
-
+  
   --spot-color: hsla(340, 100%, 50%, 1.0);
+  --spot-color-shadow: hsla(340, 100%, 50%, 0.15);
   --selection-color: hsla(340, 100%, 75%, 1.0);
   --text-color: rgb(5, 5, 5);
 
@@ -206,7 +207,10 @@ nav {
 
   transition: opacity 0.1s;
 
-  box-shadow: 0 0 var(--base-unit-half) 1px var(--spot-color);
+  box-shadow: 0 1px 1px var(--spot-color-shadow),
+    0 2px 2px var(--spot-color-shadow),
+    0 4px 4px var(--spot-color-shadow),
+    0 8px 8px var(--spot-color-shadow),
 }
 
 nav.visible {
@@ -261,7 +265,7 @@ nav div.controls {
   width: calc( var(--column-width) * 0.9 );
   height: calc( var(--base-unit) * 2.0 );
 
-  border: 1px solid var(--spot-color);
+  border: 1px solid var(--spot-color-shadow);
 
   background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
 
