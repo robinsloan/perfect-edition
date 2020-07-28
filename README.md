@@ -56,7 +56,7 @@ ruby serve.rb
 That will
 
 1. combine the text with the template to generate a finished e-book in a new `build` directory, and
-2. serve that finished e-book, which you can view at `http://localhost:8000/web-book.html`.
+2. serve that finished e-book, which you can view at `http://localhost:8000/`.
 
 (The script also generates an EPUB edition, which really isn't the focus of this project, but a feature I needed, so there you go!)
 
