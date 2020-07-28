@@ -136,6 +136,13 @@ Kobayashi Issa
                   .replace("px", "") );
   }
 
+  function getRect(element) {
+    // Terrible hack for Firefox, which treats getBoundingClientRect as an
+    // inner dimension for some unknown reason.
+    let rects = element.getClientRects();
+    return rects[rects.length - 1]
+  }
+
   function turnPageForward() {
     turnPage(1);
   }
@@ -170,7 +177,7 @@ Kobayashi Issa
 
     // there's got to be a better way to do this...
     if ( (turnDirection > 0) &&
-         ( endElement.getBoundingClientRect().x < window.innerWidth )
+         ( getRect(endElement).x < window.innerWidth )
        ) {
 
       return;
@@ -212,8 +219,8 @@ Kobayashi Issa
 
     anchoredHeading.scrollIntoView();
 
-    let wherePageEdgeShouldBe = ( window.innerWidth - bookElement.getBoundingClientRect().width ) / 2.0;
-    let offset = anchoredHeading.getBoundingClientRect().x - wherePageEdgeShouldBe;
+    let wherePageEdgeShouldBe = ( window.innerWidth - getRect(bookelement).width ) / 2.0;
+    let offset = getRect(anchoredHeading).x - wherePageEdgeShouldBe;
 
     document.body.scrollLeft += offset;
   }
