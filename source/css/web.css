@@ -4,28 +4,28 @@
   font-family: "Vollkorn";
   font-weight: 400;
   font-style: normal;
-  src: url("/font/Vollkorn-Regular.woff2") format("woff2");
+  src: url("../font/Vollkorn-Regular.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Vollkorn";
   font-weight: 400;
   font-style: italic;
-  src: url("/font/Vollkorn-Italic.woff2") format("woff2");
+  src: url("../font/Vollkorn-Italic.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Vollkorn";
   font-weight: 500;
   font-style: normal;
-  src: url("/font/Vollkorn-Semibold.woff2") format("woff2");
+  src: url("../font/Vollkorn-Semibold.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Vollkorn";
   font-weight: 500;
   font-style: italic;
-  src: url("/font/Vollkorn-SemiboldItalic.woff2") format("woff2");
+  src: url("../font/Vollkorn-SemiboldItalic.woff2") format("woff2");
 }
 
 *, *:before, *:after {
