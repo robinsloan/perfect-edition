@@ -46,7 +46,7 @@ div {
 }
 
 html {
-  font-feature-settings: "kern", "liga", "ss11";
+  font-feature-settings: "kern", "ss11"; /* removed "liga" */
 }
 
 body {
@@ -79,7 +79,7 @@ div.title h1 {
   text-transform: lowercase;
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  font-feature-settings: "kern", "ss11", "smcp"; /* removed "liga" */
   font-weight: 500;
   font-style: italic;
 
@@ -111,7 +111,7 @@ h1 {
   text-transform: lowercase;
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  font-feature-settings: "kern", "ss11", "smcp"; /* removed "liga" */
   font-weight: 500;
   font-style: italic;
 
@@ -160,7 +160,7 @@ small {
   font-size: 1.15rem;
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "ss11", "smcp";
+  font-feature-settings: "kern", "ss11", "smcp"; /* removed "liga" */
   text-transform: lowercase;
 }
 
