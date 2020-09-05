@@ -246,6 +246,7 @@ nav div.close-button {
 
 nav div.close-button:hover {
   cursor: pointer;
+  stroke: var(--text-color);
 }
 
 nav div.controls {
