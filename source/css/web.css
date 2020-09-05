@@ -403,7 +403,6 @@ img {
 
   break-before: column;
   /*max-width: 100%;*/
-  mix-blend-mode: multiply;
   object-fit: contain; /* contain? */
 }
 
