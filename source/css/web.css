@@ -772,3 +772,13 @@ div.print-cover div.title h2 {
     font-variant-caps: none;
   }
 }
+
+@supports (-moz-appearance: none) {
+  h2 {
+    display: inline-block; /* partial fix for lack of `break-before: column` support */
+  }
+
+  nav ol {
+    margin-bottom: 4rem; /* prevents final toc link from being hidden by controls */
+  }
+}
