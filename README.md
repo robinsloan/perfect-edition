@@ -70,25 +70,15 @@ If you'd like to generate the e-book without starting a web server, you can just
 
 ## Work to be done
 
-I'm pleased with what I have here so far, but it's still a long way away from being any kind of "perfect edition." I'm going to keep working on it regularly for at least the next few months. Here's what's on my to-do list:
-
-~~**Make it work in Firefox.** Currently, this template does not work at all in Firefox; currently, I have no idea why.~~ Note: This actually works better in Firefox than I realized. I unwittingly had a decrepit version installed 😅
+I'm pleased with what I have here so far, but it's still a long way away from being any kind of "perfect edition." Here's what I'd like to do, someday:
 
 **Make it work for other languages.** My development of this template has been, so far, painfully parochial, limited to the English-language text of my own novella. I want to engineer support for (and provide demo documents in) first non-English left-to-right scripts, and eventually right-to-left scripts, too. I am deeply afraid of the things this will reveal about the brittleness of the code 😬
 
 **Rationalize the CSS.** The current styling isn't completely horrible, but it has the clear signature of hasty accretion over time. I'd like to go back and organize the CSS using some clear principles so it's easier to read and understand.
 
-**Add more basic styles.** Lists, blockquotes, etc.
-
 **Improve the typesetting.** I said above that it is the aspiration of this project to be "typographically perfect." Currently it is "typographically competent, mostly," so there's a long way to go.
 
 **Think about HTML vs. JavaScript.** Early versions of this template were breathtakingly minimal, a `<nav>` and a bunch of `<p>`s---it was great. Over time I added other important elements---the TOC display button, the bookmark---and I'm now wondering if they really belong in the HTML source or if I should create and append those elements in JavaScript. I like the idea of a minimal, logical HTML file; at the same time, I want everything to be available instantly. I'm going to look at the tradeoffs here.
-
-## An invitation
-
-If this investigation into lightness and long-form reading on the web is interesting to you, I invite you to join in! Your issues---bug reports and enhancement ideas alike---are warmly invited. Pull requests, too.
-
-In particular, this project would benefit from some deep, clear thinking about CSS, so if that's your thing, whew, I could really use your help.
 
 From Oakland,
 
