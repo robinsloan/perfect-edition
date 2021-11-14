@@ -16,7 +16,6 @@ Kobayashi Issa
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- OpenGraph metadata -->
   <meta property="og:title" content="{{ title }}" />
   <meta property="og:site_name" content="{{ title }} by {{ author }}" />
   <meta property="og:type" content="book" />
@@ -26,7 +25,6 @@ Kobayashi Issa
   <meta property="og:url" content="{{ home_url }}" />
 
   {% if use_twitter_card %}
-  <!-- Twitter Card metadata -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="{{ twitter_username }}" />
   <meta name="twitter:title" content="{{ title }} by {{ author }}" />
@@ -34,7 +32,6 @@ Kobayashi Issa
   <meta name="twitter:image" content="{{ home_url }}{{ cover_image }}" />
   {% endif %}
 
-  <!-- JSON-LD metadata -->
   <script type="application/ld+json">
       {
           "@context": "http://schema.org",
@@ -46,7 +43,6 @@ Kobayashi Issa
       }
   </script>
 
-
   <meta name="generator" content="These human fingers" />
 
   <link href="css/web-book-{{ guid }}.css" type="text/css" rel="stylesheet" />
@@ -55,6 +51,7 @@ Kobayashi Issa
   <script>
 
   // https://github.com/iamdustan/smoothscroll/blob/master/src/smoothscroll.js
+
   function smoothScroll(x) {
     var startTime = performance.now();
     var startX = document.body.scrollLeft;
@@ -66,21 +63,18 @@ Kobayashi Issa
       startX: startX || 0,
       startY: 0,
       x: x || 0,
-      y: 0
+      y: 0,
     });
   }
 
   function ease(k) {
-    //return 0.5 * (1 - Math.cos(Math.PI * k));
-    //return 1-(--k)*k*k*k;
-    //return k*k*k*k*k;
-    return (-Math.pow( 2, -10 * k ) + 1 );
+    return (-Math.pow(2, -10 * k) + 1);
   }
 
-  const SCROLL_TIME = 200;
+  const SCROLL_TIME = 200; // millis
 
   function smoothScrollStep(context) {
-    let time = performance.now()
+    let time = performance.now();
     let value;
     let currentX;
     let elapsed = (time - context.startTime) / SCROLL_TIME;
@@ -93,28 +87,22 @@ Kobayashi Issa
 
     currentX = context.startX + (context.x - context.startX) * value;
 
-    // document.body.scrollTo(currentX, 0);
     document.body.scrollLeft = currentX;
 
     // keep scrolling if we have not reached our destination
     // this was > 1.0 and that wasn't working for some reason
     if (Math.abs(currentX - context.x) > 2.0) {
       requestAnimationFrame(smoothScrollStep.bind(window, context));
-    } else {
-      // other side of possible mobile optimizaton thing
-      // document.body.style.backgroundColor = realColor;
     }
   }
 
-  // snap scroll helper
-  // inspired by:
+  // snap scroll helper, inspired by:
   // https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c
 
   function setupShadowPages() {
     // is this guaranteed to execute AFTER column layout occurs?
     // currently: i do not know
-
-    let pageCount = Math.floor( bookElement.scrollWidth / window.innerWidth );
+    let pageCount = Math.floor(bookElement.scrollWidth / window.innerWidth);
 
     pageCount += 10; // uhhh :)
 
@@ -131,16 +119,18 @@ Kobayashi Issa
   }
 
   function getComputed(propertyName) {
-    return Number( getComputedStyle(bookElement)
-                  .getPropertyValue(propertyName)
-                  .replace("px", "") );
+    return Number(
+      getComputedStyle(bookElement)
+        .getPropertyValue(propertyName)
+        .replace("px", ""),
+    );
   }
 
   function getRect(element) {
-    // Terrible hack for Firefox, which treats getBoundingClientRect as an
-    // inner dimension for some unknown reason.
+    // terrible hack for Firefox, which treats getBoundingClientRect as an
+    // inner dimension for some unknown reason:
     let rects = element.getClientRects();
-    return rects[rects.length - 1]
+    return rects[rects.length - 1];
   }
 
   function turnPageForward() {
@@ -152,9 +142,7 @@ Kobayashi Issa
   }
 
   function turnPage(turnDirection) {
-
     let currentLeftOffset = document.body.scrollLeft;
-
     let columnWidth = getComputed("column-width");
     let columnGap = getComputed("column-gap");
     let columnTotal = columnWidth + columnGap;
@@ -162,7 +150,8 @@ Kobayashi Issa
     // this was previously Math.floor which was causing problems when
     // paging backwards
 
-    let closestPageNumber = Math.round( currentLeftOffset / columnTotal ) + turnDirection;
+    let closestPageNumber = Math.round(currentLeftOffset / columnTotal) +
+      turnDirection;
 
     writePageNumber(closestPageNumber);
 
@@ -170,16 +159,16 @@ Kobayashi Issa
 
     // aha, but what if we are already AT that page?
     // 8.0 pixels is a bit of a "magic number"...
-    if ( Math.abs( closestPageEdge - currentLeftOffset) < 8.0 ) {
+    if (Math.abs(closestPageEdge - currentLeftOffset) < 8.0) {
       closestPageEdge += columnTotal * turnDirection;
-      writePageNumber( closestPageNumber + 1 ); // hacky
+      writePageNumber(closestPageNumber + 1); // hacky
     }
 
-    // there's got to be a better way to do this...
-    if ( (turnDirection > 0) &&
-         ( getRect(endElement).x < window.innerWidth )
-       ) {
-
+    // you can't turn the page if you're at the end
+    if (
+      (turnDirection > 0) &&
+      (getRect(endElement).x < window.innerWidth)
+    ) {
       return;
     }
 
@@ -202,35 +191,37 @@ Kobayashi Issa
     // the cute tiny bookmark
     let bookmarkElement = document.querySelector("div.bookmark");
     bookmarkElement.style.display = "block";
-    // bookmarkElement.style.top = `0px`;
     bookmarkElement.style.left = `${pageEdge + columnWidth / 2.0}px`;
-    console.log(bookmarkElement.style.left);
 
     document.body.scrollLeft = pageEdge;
   }
 
   function turnToAnchor(anchor) {
-    let editedAnchor = "chapter_" + anchor.replace( "#", "" );
+    let editedAnchor = "chapter_" + anchor.replace("#", "");
 
-    let anchoredHeading = Array.from( document.querySelectorAll("h2") )
-                               .find( heading => {
-                                  return heading.getAttribute("id") == editedAnchor;
-                                } );
+    let anchoredHeading = Array.from(document.querySelectorAll("h2"))
+      .find((heading) => {
+        return heading.getAttribute("id") == editedAnchor;
+      });
 
     anchoredHeading.scrollIntoView();
 
-    let wherePageEdgeShouldBe = ( window.innerWidth - getRect(bookElement).width ) / 2.0;
+    let wherePageEdgeShouldBe = (window.innerWidth - getRect(bookElement).width) /
+      2.0;
     let offset = getRect(anchoredHeading).x - wherePageEdgeShouldBe;
 
     document.body.scrollLeft += offset;
   }
 
   function setTextScale(scale) {
-    document.documentElement.style.setProperty( "--font-size", `${baseFontSize * scale}px` );
+    document.documentElement.style.setProperty(
+      "--font-size",
+      `${baseFontSize * scale}px`,
+    );
   }
 
   function toggleNav() {
-    if ( navElement.className == "invisible" ) {
+    if (navElement.className == "invisible") {
       navElement.className = "visible";
     } else {
       navElement.className = "invisible";
@@ -238,14 +229,13 @@ Kobayashi Issa
   }
 
   function writePageNumber(pageNumber) {
-    window.localStorage.setItem( "pageNumber", pageNumber );
+    window.localStorage.setItem("pageNumber", pageNumber);
   }
 
   function readPageNumber() {
-    let pageNumber = Number( window.localStorage.getItem("pageNumber") );
-    if ( pageNumber > 1 ) {
-      console.log(`turning to page ${pageNumber}`)
-      turnToPage(pageNumber); // i'm not TOTALLY sure why i need the +1... oh well
+    let pageNumber = Number(window.localStorage.getItem("pageNumber"));
+    if (pageNumber > 1) {
+      turnToPage(pageNumber);
     }
   }
 
@@ -256,62 +246,60 @@ Kobayashi Issa
   var lastMouseDown = Date.now();
   var lastClick = Date.now();
 
-  document.addEventListener("DOMContentLoaded", e => {
-
+  document.addEventListener("DOMContentLoaded", (e) => {
     bookElement = document.querySelector("div.book");
     navElement = document.querySelector("nav");
-    endElement = document.querySelector("p.last-page")
+    endElement = document.querySelector("p.last-page");
 
+    // this is a bit arbitrary; basically a kind of "media query"
     if (window.innerWidth < 640) {
       setupShadowPages();
     }
 
     if (window.location.hash.length > 1) { // > 1, because an empty "#" is length 1
-      turnToAnchor( window.location.hash )
+      turnToAnchor(window.location.hash);
     } else {
       readPageNumber();
     }
 
     // toc button
-
-    document.querySelector("button.toc-button").addEventListener("click", e => {
+    document.querySelector("button.toc-button").addEventListener("click", (e) => {
       toggleNav();
       e.stopPropagation();
     });
 
-    // cross button
-
-    document.querySelector("div.close-button").addEventListener("click", e => {
+    // close button
+    document.querySelector("div.close-button").addEventListener("click", (e) => {
       toggleNav();
       e.stopPropagation();
     });
 
     // toc text size buttons
-
-    document.querySelectorAll("nav div.controls button").forEach(button => {
+    document.querySelectorAll("nav div.controls button").forEach((button) => {
       let size = `${baseFontSize * button.dataset.scale}px`;
       button.style.fontSize = size;
 
-      button.addEventListener("click", e => {
+      button.addEventListener("click", (e) => {
         setTextScale(e.target.dataset.scale);
         e.stopPropagation();
       });
     });
 
-    // might delete this later, b/c it is possibly ridiculous:
-    // updating the buttons to reflect the "real" base font size
+    // this is hacky, but I'm not sure of a better way to wait for
+    // style to be applied/computed. The getComputedStyle info isn't yet
+    // available when DOMContentLoaded fires.
+    setTimeout(function () {
+      let realFontSize = Number(
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("font-size")
+          .replace("px", ""),
+      );
 
-    setTimeout( function(){
-      let realFontSize = Number( getComputedStyle(document.documentElement)
-                                .getPropertyValue("font-size")
-                                .replace("px", "") );
-      console.log(`real font size detected: ${realFontSize}px`);
-
-      document.querySelectorAll("nav div.controls button").forEach(button => {
+      document.querySelectorAll("nav div.controls button").forEach((button) => {
         let size = `${realFontSize * button.dataset.scale}px`;
         button.style.fontSize = size;
 
-        button.addEventListener("click", e => {
+        button.addEventListener("click", (e) => {
           setTextScale(e.target.dataset.scale);
           e.stopPropagation();
         });
@@ -319,40 +307,36 @@ Kobayashi Issa
     }, 1000);
 
     // toc chapter links
-
-    document.querySelectorAll("nav a").forEach(link => {
-
-      link.addEventListener("click", e => {
+    document.querySelectorAll("nav a").forEach((link) => {
+      link.addEventListener("click", (e) => {
         toggleNav();
-        turnToAnchor( e.target.getAttribute("href") )
+        turnToAnchor(e.target.getAttribute("href"));
         e.stopPropagation();
       });
     });
-
   });
 
-  document.addEventListener("keydown", e => {
+  document.addEventListener("keydown", (e) => {
     if (event.keyCode === 37) { // left
       turnPageBack();
     }
-    if ( (event.keyCode === 39) || (event.keyCode === 32) ) { // right, space
+    if ((event.keyCode === 39) || (event.keyCode === 32)) { // right, space
       turnPageForward();
     }
   });
 
-  document.addEventListener("wheel", e => {
-
+  document.addEventListener("wheel", (e) => {
     if (navElement.className == "visible") {
       return;
     }
 
-    if ( Math.abs(e.deltaY) > Math.abs(e.deltaX) ) {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       e.preventDefault();
       document.body.scrollLeft += e.deltaY;
     }
   }, { passive: false });
 
-  document.addEventListener("mousedown", function(e) {
+  document.addEventListener("mousedown", function (e) {
     lastMouseDown = Date.now();
   });
 
@@ -360,17 +344,16 @@ Kobayashi Issa
   const CLICK_DEBOUNCE_TIME = 50;
   const LONG_PRESS_TIME = 250;
 
-  document.addEventListener("click", function(e) {
-
+  document.addEventListener("click", function (e) {
     let now = Date.now();
 
     // don't advance on long press (text selection?)
-    if ( (now - lastMouseDown) > LONG_PRESS_TIME ) {
+    if ((now - lastMouseDown) > LONG_PRESS_TIME) {
       return;
     }
 
     // don't advance on double-click
-    if ( (now - lastClick) < CLICK_DEBOUNCE_TIME ) {
+    if ((now - lastClick) < CLICK_DEBOUNCE_TIME) {
       return;
     }
 
@@ -382,11 +365,12 @@ Kobayashi Issa
     }
 
     // don't advance if we are selecting text
-    if ( window.getSelection().toString().length > 0 ) {
+    if (window.getSelection().toString().length > 0) {
       return;
     }
 
-    if ( e.clientX < (window.innerWidth / 3.0) ) {
+    // ok... u can advance
+    if (e.clientX < (window.innerWidth / 3.0)) {
       turnPageBack();
     } else {
       turnPageForward();
@@ -395,10 +379,9 @@ Kobayashi Issa
 
   // hash change detector
   // note: it's a window event, not a document event
-
-  window.addEventListener("hashchange", e => {
+  window.addEventListener("hashchange", (e) => {
     if (window.location.hash.length > 1) {
-      turnToAnchor( window.location.hash )
+      turnToAnchor(window.location.hash);
     }
   });
 
