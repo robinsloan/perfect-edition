@@ -104,7 +104,7 @@ html {
   font-size: var(--font-size);
   scroll-behavior: smooth;
 
-  /* ss11 gives us the more normal 1 digit */
+  /* ss11 gives us the more normal 1 digit in Vollkorn */
   font-feature-settings: "kern", "liga", "ss11";
 }
 
@@ -277,7 +277,6 @@ nav div.controls button {
 
   margin: 0 var(--base-unit-half) 0 0;
   width: var(--base-unit);
-  /*line-height: calc( var(--base-unit) * 2.0 );*/
   height: auto;
 
   padding: 0;
@@ -285,7 +284,7 @@ nav div.controls button {
   cursor: pointer;
   text-align: center;
   color: var(--spot-color);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 nav div.controls button:last-child {
@@ -300,7 +299,6 @@ nav h1 {
   margin: 0 0 var(--line-height) 0;
   width: calc( var(--column-width) * 0.9 - calc( var(--base-unit) * 2.0 ) );
   padding: 0;
-  /* text-transform: uppercase; */
   font-style: italic;
   line-height: var(--line-height);
   font-size: 1rem;
@@ -401,7 +399,7 @@ img {
   -webkit-column-break-inside: avoid;
 
   break-before: column;
-  /*max-width: 100%;*/
+  /* max-width: 100%; */
   mix-blend-mode: multiply;
   object-fit: contain; /* contain? */
 }
@@ -512,22 +510,6 @@ div.book h1 {
   break-before: column;
 }
 
-/* these are the "shades" that obscure text on the sides of the screen in wider browsers */
-
-/* originally, I had some SVG arrows hanging around but I don't think they're necessary */
-
-/* for svg encoding: https://yoksel.github.io/url-encoder/ */
-/* thus, commented out */
-
-/*svg original:
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 60 90" xml:space="preserve">
-  <g>
-    <rect x="0" y="0" width="60" height="90" style="fill: rgba(255, 255, 255, 0.75);" />
-    <polygon points="30,45 60,30 60,60" style="fill: rgba(0, 0, 0, 0.125);" />
-  </g>
-</svg>
-*/
-
 div.book::before {
   content: "";
   position: fixed;
@@ -543,9 +525,6 @@ div.book::before {
                               var(--shade-color-origin) 95%,
                               var(--shade-color-destination) 100%);
 
-  /* i just don't think this is necessary...
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' x='0px' y='0px' width='100%25' height='100%25' viewBox='0 0 60 90' xml:space='preserve'%3E%3Cg%3E%3Crect x='0' y='0' width='60' height='90' style='fill: rgba(255, 255, 255, 0.75);' /%3E%3Cpolygon points='30,45 60,30 60,60' style='fill: rgba(0, 0, 0, 0.125);' /%3E%3C/g%3E%3C/svg%3E");
-  */
 }
 
 div.book::after {
