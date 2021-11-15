@@ -75,17 +75,15 @@ Kobayashi Issa
 
   function smoothScrollStep(context) {
     let time = performance.now();
-    let value;
-    let currentX;
-    let elapsed = (time - context.startTime) / SCROLL_TIME;
+    let elapsedTime = (time - context.startTime) / SCROLL_TIME;
 
     // avoid elapsed times higher than one
-    elapsed = elapsed > 1 ? 1 : elapsed;
+    elapsedTime = elapsedTime > 1 ? 1 : elapsedTime;
 
     // apply easing to elapsed time
-    value = ease(elapsed);
+    let easedValue = ease(elapsedTime);
 
-    currentX = context.startX + (context.x - context.startX) * value;
+    let currentX = context.startX + (context.x - context.startX) * easedValue;
 
     document.body.scrollLeft = currentX;
 

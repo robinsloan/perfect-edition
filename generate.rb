@@ -171,7 +171,7 @@ print "Generating epub..."
 
 epub_build_path = "build/epub/BOOK"
 
-# The epub's chapter headings don't need to be clikcable, but
+# The epub's chapter headings don't need to be clickable, but
 # they do have to have the correct anchor names:
 
 epub_book.css("h2").each do |heading|
