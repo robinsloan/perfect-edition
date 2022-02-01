@@ -39,11 +39,11 @@
   --column-width: 50vw;
 }
 
-@supports (width: clamp(28px, 5vh, 56px)) {
+@supports (width: clamp(28px, 5vh, 48px)) {
   :root {
     /* Baseline defaults for all devices and browsers that support clamp() */
     /* Edge Chromium on Android has an issue with supporting clamp() for widths */
-    --base-unit: clamp(28px, 5vh, 56px);
+    --base-unit: clamp(28px, 5vh, 48px);
     --column-width: clamp(480px, 50vw, 640px);
   }
 }
