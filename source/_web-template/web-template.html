@@ -147,7 +147,6 @@ Kobayashi Issa
 
     // this was previously Math.floor which was causing problems when
     // paging backwards
-
     let closestPageNumber = Math.round(currentLeftOffset / columnTotal) +
       turnDirection;
 
@@ -164,10 +163,11 @@ Kobayashi Issa
 
     // you can't turn the page if you're at the end
     if (
-      (turnDirection > 0) &&
-      (getRect(endElement).x < window.innerWidth)
+        (turnDirection > 0) &&
+        (getRect(endElement).x <= (window.innerWidth + columnGap))
     ) {
-      return;
+        console.log("thud");
+        return;
     }
 
     // if we're turning a page, we are navigating away from a chapter title,
@@ -316,9 +316,11 @@ Kobayashi Issa
 
   document.addEventListener("keydown", (e) => {
     if (event.keyCode === 37) { // left
+      e.preventDefault();
       turnPageBack();
     }
     if ((event.keyCode === 39) || (event.keyCode === 32)) { // right, space
+      e.preventDefault();
       turnPageForward();
     }
   });
