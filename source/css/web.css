@@ -543,30 +543,6 @@ div.book::after {
                               var(--shade-color-destination) 100%);
 }
 
-/* TO MAKE SNAP-SCROLL WORK ON MOBILE */
-
-/* inspiration:
-   https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c */
-
-div.shadow-page-container {
-  display: none;
-  position: relative;
-  /* margin: var(--base-unit-half); */
-  width: calc( 100vw * var(--page-count));
-}
-
-div.shadow-page {
-  background-color: transparent;
-  float: left;
-  height: 1px;
-  margin-left: 0;
-  margin-right: var(--column-gap);
-  width: var(--column-width);
-  scroll-snap-align: start;
-  position: relative;
-  z-index: -10;
-}
-
 /* PRINT STYLES */
 /* this is a mess... */
 
@@ -629,11 +605,6 @@ div.print-cover div.title h2 {
   body {
     height: calc( var(--column-height) + var(--vertical-padding) * 2.0 );
     /* having this set at 100vh was causing that weird mobile slip problem */
-
-    /* this is really interesting: */
-    scroll-snap-type: x mandatory;
-    /* idea from: https://github.com/jpamental/moby-dick/pull/5 */
-    /* with thanks to kyle gach */
   }
 
   div.shadow-page-container {

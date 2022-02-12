@@ -52,18 +52,16 @@ Kobayashi Issa
 
   // https://github.com/iamdustan/smoothscroll/blob/master/src/smoothscroll.js
 
-  function smoothScroll(x) {
+  function smoothScroll(x, shouldTurnSlow) {
     var startTime = performance.now();
     var startX = document.body.scrollLeft;
-    var startY = 0;
 
     // scroll
     smoothScrollStep({
       startTime: startTime,
       startX: startX || 0,
-      startY: 0,
       x: x || 0,
-      y: 0,
+      shouldTurnSlow: shouldTurnSlow
     });
   }
 
@@ -71,11 +69,12 @@ Kobayashi Issa
     return (-Math.pow(2, -10 * k) + 1);
   }
 
-  const SCROLL_TIME = 200; // millis
+  const SCROLL_TIME_FAST = 200; // millis
+  const SCROLL_TIME_SLOW = 1000; // millis
 
   function smoothScrollStep(context) {
-    let time = performance.now();
-    let elapsedTime = (time - context.startTime) / SCROLL_TIME;
+    let scrollTime = context.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
+    let elapsedTime = (performance.now() - context.startTime) / SCROLL_TIME;
 
     // avoid elapsed times higher than one
     elapsedTime = elapsedTime > 1 ? 1 : elapsedTime;
@@ -91,28 +90,6 @@ Kobayashi Issa
     // this was > 1.0 and that wasn't working for some reason
     if (Math.abs(currentX - context.x) > 2.0) {
       requestAnimationFrame(smoothScrollStep.bind(window, context));
-    }
-  }
-
-  // snap scroll helper, inspired by:
-  // https://github.com/jpamental/moby-dick/pull/5/commits/ec022061684ae4c233fba047fb341b41deeead6c
-
-  function setupShadowPages() {
-    // is this guaranteed to execute AFTER column layout occurs?
-    // currently: i do not know
-    let pageCount = Math.floor(bookElement.scrollWidth / window.innerWidth);
-
-    pageCount += 10; // uhhh :)
-
-    document.documentElement.style.setProperty("--page-count", pageCount);
-
-    let shadowPageContainer = document.querySelector("div.shadow-page-container");
-
-    for (let i = 0; i < pageCount; i++) {
-      let shadowPage = document.createElement("div");
-      shadowPage.innerHTML = " ";
-      shadowPage.className = "shadow-page";
-      shadowPageContainer.appendChild(shadowPage);
     }
   }
 
@@ -132,14 +109,18 @@ Kobayashi Issa
   }
 
   function turnPageForward() {
-    turnPage(1);
+    turnPage(1, false);
   }
 
   function turnPageBack() {
-    turnPage(-1);
+    turnPage(-1, false);
   }
 
-  function turnPage(turnDirection) {
+  function snapToPage() {
+    turnPage(0, true);
+  }
+
+  function turnPage(turnDirection, shouldTurnSlow) {
     let currentLeftOffset = document.body.scrollLeft;
     let columnWidth = getComputed("column-width");
     let columnGap = getComputed("column-gap");
@@ -174,7 +155,7 @@ Kobayashi Issa
     // so we want to clear this out
     window.location.hash = "";
 
-    smoothScroll(closestPageEdge);
+    smoothScroll(closestPageEdge, shouldTurnSlow);
   }
 
   function turnToPage(pageNumber) {
@@ -182,9 +163,13 @@ Kobayashi Issa
     let columnGap = getComputed("column-gap");
     let columnTotal = columnWidth + columnGap;
 
-    let pageEdge = pageNumber * columnTotal;
-
-    writePageNumber(pageNumber);
+    var pageEdge = pageNumber * columnTotal;
+    if (pageEdge > bookElement.scrollWidth) {
+      // Page number is greater than total number of pages currently displayed
+      // (this isn't uncommon, because of reflow for different window sizes)
+      // so, let's just go the end. Not a perfect solution, fine for now
+      pageEdge = bookElement.scrollWidth - (columnTotal + columnWidth);
+    }
 
     // the cute tiny bookmark
     let bookmarkElement = document.querySelector("div.bookmark");
@@ -240,6 +225,7 @@ Kobayashi Issa
   var bookElement;
   var navElement;
   var endElement;
+  var scrollTimer;
   var baseFontSize = 18.0;
   var lastMouseDown = Date.now();
   var lastClick = Date.now();
@@ -249,16 +235,22 @@ Kobayashi Issa
     navElement = document.querySelector("nav");
     endElement = document.querySelector("p.last-page");
 
-    // this is a bit arbitrary; basically a kind of "media query"
-    if (window.innerWidth < 640) {
-      setupShadowPages();
-    }
-
     if (window.location.hash.length > 1) { // > 1, because an empty "#" is length 1
       turnToAnchor(window.location.hash);
     } else {
       readPageNumber();
     }
+
+    // Following a free scroll, this snaps to the nearest page.
+    document.body.addEventListener("scroll", (e) => {
+      if (scrollTimer) {
+        clearTimeout(scrollTimer);
+      }
+
+      scrollTimer = setTimeout(() => {
+        snapToPage();
+      }, 200);
+    });
 
     // toc button
     document.querySelector("button.toc-button").addEventListener("click", (e) => {
@@ -421,9 +413,8 @@ Kobayashi Issa
 
 <div class="tutorial">
   <h2>How to Read</h2>
-  <p><i>On a phone:</i><br/>Swipe, or tap the edges of the page</p>
-  <p><i>On a laptop:</i><br/>Use the arrow keys, the space bar, or the touch pad</p>
-  <p><i>On a desktop:</i><br/> Use any of the above, or the scroll wheel</p>
+  <p><i>On a phone:</i><br/>Tap the edges of the page</p>
+  <p><i>On a computer:</i><br/>Click the edges of the page, or use the arrow keys or the space bar</p>
   <p>Basically, <small>everything works</small></p>
 </div>
 
@@ -441,8 +432,6 @@ Kobayashi Issa
 </div>
 
 </div>
-
-<div class="shadow-page-container"></div>
 
 <button class="toc-button">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 80 40" xml:space="preserve">
