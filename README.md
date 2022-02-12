@@ -4,7 +4,7 @@ is an aspirational name for this project, which aims to provide a lean, fast-loa
 
 <img src="demo.gif" style="width: 100%" alt="Animated demo of the template" />
 
-You can see a live, current-ish demo of the template [here](https://robinsloan.github.io/perfect-edition/build/web/index.html).
+You can see a live, current-ish demo of the template [here](https://www.robinsloan.com/books/annabel-scheme-serial/read/).
 
 ## What it is
 
@@ -66,20 +66,4 @@ The `serve.rb` script watches the entire `source` directory and, whenever you ma
 
 If you'd like to generate the e-book without starting a web server, you can just run `ruby generate.rb`.
 
-**I think it's important to say:** It is my expectation that this template will be most useful to others not as-is, but instead as a starting point for specific, bespoke designs. Print books look different; that's what makes them great. I think web e-books should look different, too. So, even though I've been calling this a template, I hope it works more as a springboard, or even just a source of code snippets.
-
-## Work to be done
-
-I'm pleased with what I have here so far, but it's still a long way away from being any kind of "perfect edition." Here's what I'd like to do, someday:
-
-**Make it work for other languages.** My development of this template has been, so far, painfully parochial, limited to the English-language text of my own novella. I want to engineer support for (and provide demo documents in) first non-English left-to-right scripts, and eventually right-to-left scripts, too. I am deeply afraid of the things this will reveal about the brittleness of the code 😬
-
-**Rationalize the CSS.** The current styling isn't completely horrible, but it has the clear signature of hasty accretion over time. I'd like to go back and organize the CSS using some clear principles so it's easier to read and understand.
-
-**Improve the typesetting.** I said above that it is the aspiration of this project to be "typographically perfect." Currently it is "typographically competent, mostly," so there's a long way to go.
-
-**Think about HTML vs. JavaScript.** Early versions of this template were breathtakingly minimal, a `<nav>` and a bunch of `<p>`s---it was great. Over time I added other important elements---the TOC display button, the bookmark---and I'm now wondering if they really belong in the HTML source or if I should create and append those elements in JavaScript. I like the idea of a minimal, logical HTML file; at the same time, I want everything to be available instantly. I'm going to look at the tradeoffs here.
-
-From Oakland,
-
-Robin
+**I think it's important to say:** It is my expectation that this template will be most useful to others not as-is, but instead as a starting point for specific, bespoke designs. Print books are diverse; that's what makes them great. I think web e-books should be diverse, too. So, even though I've been calling this a template, I hope it works more as a springboard, or even just a source of code snippets.
