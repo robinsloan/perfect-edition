@@ -48,7 +48,7 @@ Kobayashi Issa
   <link href="css/web-book-{{ guid }}.css" type="text/css" rel="stylesheet" />
 
   <title>{{ title }}</title>
-  <script>
+  <script type="text/javascript">
 
   // https://github.com/iamdustan/smoothscroll/blob/master/src/smoothscroll.js
 
@@ -74,7 +74,7 @@ Kobayashi Issa
 
   function smoothScrollStep(context) {
     let scrollTime = context.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
-    let elapsedTime = (performance.now() - context.startTime) / SCROLL_TIME;
+    let elapsedTime = (performance.now() - context.startTime) / scrollTime;
 
     // avoid elapsed times higher than one
     elapsedTime = elapsedTime > 1 ? 1 : elapsedTime;
@@ -414,7 +414,7 @@ Kobayashi Issa
 <div class="tutorial">
   <h2>How to Read</h2>
   <p><i>On a phone:</i><br/>Tap the edges of the page</p>
-  <p><i>On a computer:</i><br/>Click the edges of the page, or use the arrow keys or the space bar</p>
+  <p><i>On a computer:</i><br/>Click the edges of the page, or use the arrow keys, or&nbsp;use&nbsp;the&nbsp;space&nbsp;bar</p>
   <p>Basically, <small>everything works</small></p>
 </div>
 

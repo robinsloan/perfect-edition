@@ -138,7 +138,6 @@ div.tutorial {
   height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
 
   text-align: center;
-
   break-after: column;
 }
 
@@ -147,7 +146,6 @@ div.tutorial h2 {
   flex-grow: 0;
   margin-top: 0;
   margin-bottom: var(--line-height);
-
   font-family: var(--body-text-font-stack); /* a bit ugly */
 }
 
@@ -444,8 +442,7 @@ div.book {
   column-width: var(--column-width);
 
   margin: var(--base-unit-half);
-  width: var(--column-width); /* must match column-width, or am fucked */
-
+  width: var(--column-width);
   height: var(--column-height);
 }
 
@@ -604,7 +601,6 @@ div.print-cover div.title h2 {
 
   body {
     height: calc( var(--column-height) + var(--vertical-padding) * 2.0 );
-    /* having this set at 100vh was causing that weird mobile slip problem */
   }
 
   div.shadow-page-container {
