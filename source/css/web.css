@@ -59,7 +59,7 @@
 
   --vertical-padding: var(--base-unit);
 
-    /* this 4.0 is a bit cryptic; we are making space for the toc button:; */
+  /* this 4.0 is a bit cryptic; we are making space for the toc button:; */
   --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
   --column-gap: var(--base-unit);
 
@@ -593,18 +593,13 @@ div.print-cover div.title h2 {
 
   :root {
     --column-width: calc(100vw - var(--base-unit));
-    /* this is quite blunt */
-    /* but it's to compensate for mobile browser chrome */
-    /* maybe there's a more elegant solution? */
-    --column-height: 65vh;
+    --column-height: calc(100vh - calc(var(--vertical-padding) * 5.0));
+    /* x5.0 gets us enough clearance for mobile browser chrome */
+    /* I hate it, but I don't think there's presently a better solution */
   }
 
   body {
     height: calc( var(--column-height) + var(--vertical-padding) * 2.0 );
-  }
-
-  div.shadow-page-container {
-    display: block;
   }
 
   div.book::before, div.book::after {
@@ -614,15 +609,12 @@ div.print-cover div.title h2 {
 }
 
 @media screen and (min-width: 640px) {
-
   div.book {
     margin-left: calc(50vw - var(--column-width) / 2.0);
   }
-
 }
 
 @media screen and (min-height: 1000px) {
-
   :root {
     --vertical-padding: calc( var(--base-unit) * 2.0 );
   }
@@ -630,7 +622,6 @@ div.print-cover div.title h2 {
   div.bookmark {
     top: calc( var(--vertical-padding) * -1.5 ); /* now THAT is a stupid magic number */
   }
-
 }
 
 @media print {
