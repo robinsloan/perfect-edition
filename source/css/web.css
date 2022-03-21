@@ -151,6 +151,7 @@ div.tutorial h2 {
 
 div.tutorial p {
   flex-grow: 0;
+  text-indent: 0;
   margin-bottom: var(--line-height);
 }
 
