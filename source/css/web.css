@@ -348,7 +348,6 @@ h2 {
   font-size: 1.5rem;
   font-weight: 500;
   font-style: italic;
-  column-break-before: always;
   break-before: column;
 }
 
@@ -394,10 +393,8 @@ img {
   max-height: var(--column-height);
 
   overflow: hidden;
-  -webkit-column-break-before: always;
-  -webkit-column-break-inside: avoid;
-
   break-before: column;
+  break-after: column;
   /* max-width: 100%; */
   mix-blend-mode: multiply;
   object-fit: contain; /* contain? */
@@ -476,6 +473,7 @@ div.book div.title h1 {
   font-feature-settings: "kern", "liga", "smcp", "ss11";
 
   color: var(--text-color);
+  break-before: avoid; /* updated b/c of Chrome change */
 }
 
 div.book div.title h1 span {
@@ -485,6 +483,7 @@ div.book div.title h1 span {
 div.book div.title h2 {
   flex-grow: 0;
   margin-top: var(--line-height);
+  break-before: avoid; /* updated b/c of Chrome change */
 }
 
 div.book h1 {
@@ -505,7 +504,9 @@ div.book h1 {
   color: var(--spot-color);
 
   text-align: center;
+
   break-before: column;
+  break-after: column;
 }
 
 div.book::before {
