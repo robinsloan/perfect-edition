@@ -59,8 +59,10 @@
 
   --vertical-padding: var(--base-unit);
 
-  /* this 4.0 is a bit cryptic; we are making space for the toc button:; */
+  /* this 3.0 is a bit cryptic; we are making space for the toc button: */
+  /* also experimenting with the svh viewport measurement */
   --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
+  --column-height: calc(100svh - calc(var(--vertical-padding) * 4.0));
   --column-gap: var(--base-unit);
 
   --paper-hue: 100;
@@ -79,6 +81,7 @@
   --page-count: 1;
 }
 
+/*
 @media(prefers-color-scheme:dark) {
   :root {
     --paper-lightness: 1%;
@@ -86,6 +89,7 @@
     --text-color: rgb(250, 250, 250);
   }
 }
+*/
 
 ::-moz-selection { background: var(--selection-color); }
 ::selection { background: var(--selection-color); }
@@ -129,30 +133,31 @@ body {
   font-weight: 400;
 }
 
-div.tutorial {
+div.book div.tutorial {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: var(--line-height);
 
   width: var(--column-width);
-  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
+  height: calc(var(--column-height) - 1px);
+  overflow: hidden;  /* hacky, prevents weird flow problems */
 
   text-align: center;
   break-after: column;
 }
 
-div.tutorial h2 {
+div.book div.tutorial h2 {
   height: auto;
   flex-grow: 0;
-  margin-top: 0;
-  margin-bottom: var(--line-height);
+  margin: 0;
   font-family: var(--body-text-font-stack); /* a bit ugly */
 }
 
-div.tutorial p {
+div.book div.tutorial p {
   flex-grow: 0;
   text-indent: 0;
-  margin-bottom: var(--line-height);
+  margin: 0;
 }
 
 button.toc-button {
@@ -348,7 +353,6 @@ h2 {
   font-size: 1.5rem;
   font-weight: 500;
   font-style: italic;
-  break-before: column;
 }
 
 a, a:link, a:visited {
@@ -395,6 +399,7 @@ img {
   overflow: hidden;
   break-before: column;
   break-after: column;
+
   /* max-width: 100%; */
   mix-blend-mode: multiply;
   object-fit: contain; /* contain? */
@@ -448,12 +453,13 @@ div.book div.title {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: var(--line-height);
 
   width: var(--column-width);
-  height: calc( var(--column-height) - 1px ); /* full 100vh was causing an extra page break */
+  height: var(--column-height);
+  overflow: hidden; /* hacky, prevents weird flow problems */
 
   text-align: center;
-  /* break-after: column; */
 }
 
 div.book div.title h1 {
@@ -473,7 +479,6 @@ div.book div.title h1 {
   font-feature-settings: "kern", "liga", "smcp", "ss11";
 
   color: var(--text-color);
-  break-before: avoid; /* updated b/c of Chrome change */
 }
 
 div.book div.title h1 span {
@@ -482,13 +487,10 @@ div.book div.title h1 span {
 
 div.book div.title h2 {
   flex-grow: 0;
-  margin-top: var(--line-height);
-  break-before: avoid; /* updated b/c of Chrome change */
+  margin: 0;
 }
 
 div.book h1 {
-  height: calc( var(--column-height) - 1px);
-
   margin: 0;
   padding: 0;
   text-transform: lowercase;
@@ -505,8 +507,8 @@ div.book h1 {
 
   text-align: center;
 
+  overflow: hidden; /* hacky */
   break-before: column;
-  break-after: column;
 }
 
 div.book::before {
@@ -595,13 +597,6 @@ div.print-cover div.title h2 {
 
   :root {
     --column-width: calc(100vw - var(--base-unit));
-    --column-height: calc(100vh - calc(var(--vertical-padding) * 5.0));
-    /* x5.0 gets us enough clearance for mobile browser chrome */
-    /* I hate it, but I don't think there's presently a better solution */
-  }
-
-  body {
-    height: calc( var(--column-height) + var(--vertical-padding) * 2.0 );
   }
 
   div.book::before, div.book::after {
