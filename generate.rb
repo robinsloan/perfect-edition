@@ -10,7 +10,7 @@ require "securerandom"
 
 def normalize_html(html)
   html.each_line.inject("") do |html, line|
-    if line.length != "\n"
+    if line != "\n"
       html += line.strip + "\n"
     end
   end
