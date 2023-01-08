@@ -34,14 +34,14 @@
 }
 
 :root {
-  /* Baseline defaults for all devices */
+  /* Defaults for all devices */
   --base-unit: 5vh;
   --column-width: 50vw;
 }
 
 @supports (width: clamp(28px, 5vh, 48px)) {
   :root {
-    /* Baseline defaults for all devices and browsers that support clamp() */
+    /* Defaults for all devices and browsers that support clamp() */
     /* Edge Chromium on Android has an issue with supporting clamp() for widths */
     --base-unit: clamp(28px, 5vh, 48px);
     --column-width: clamp(480px, 50vw, 640px);
@@ -59,8 +59,8 @@
 
   --vertical-padding: var(--base-unit);
 
-  /* this 3.0 is a bit cryptic; we are making space for the toc button: */
-  /* also experimenting with the svh viewport measurement */
+  /* This 4.0 is a bit cryptic; we are making space for the toc button. */
+  /* Also experimenting with the svh viewport unit */
   --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
   --column-height: calc(100svh - calc(var(--vertical-padding) * 4.0));
   --column-gap: var(--base-unit);
@@ -70,7 +70,7 @@
   --paper-lightness: 99%;
   --paper-color: hsla( var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 1.0 );
 
-  /* these are for the "shades" that obscure text on the sides of the screen in wider browsers */
+  /* These are for the "shades" that obscure text on the sides of the screen in wider browsers */
   --shade-color-destination: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.0);
   --shade-color-origin: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.75);
 
@@ -94,7 +94,7 @@
 ::-moz-selection { background: var(--selection-color); }
 ::selection { background: var(--selection-color); }
 
-/* reset */
+/* Reset */
 button {
   outline: none;
   border: none;
@@ -115,7 +115,7 @@ html {
 body {
   margin: 0;
 
-  height: 100vh; /* so scrollbar appears at bottom */
+  height: 100vh; /* So the scrollbar appears at the bottom */
 
   background-color: var(--paper-color);
   padding: var(--vertical-padding) 0 0 0;
@@ -123,7 +123,6 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
 
-  /* to justify or not to justify? */
   text-align: left; /* sigh */
   line-height: var(--line-height);
 
@@ -194,11 +193,11 @@ nav {
   position: fixed;
 
   top: calc( var(--vertical-padding) + var(--base-unit) );
-  /* the toc is 90% of the page's width */
+  /* The toc is 90% of the page's width */
   left: calc( 50vw - var(--column-width) * 0.45);
 
   z-index: 10000;
-  /* this is all a little bit stupid and I'm sure there's a more
+  /* This is all a little bit stupid and I'm sure there's a more
   principled way to do it */
   width: calc( var(--column-width) * 0.9 );
   height: calc( var(--column-height) - var(--base-unit) );
@@ -389,7 +388,7 @@ small {
 
 img {
   display: block;
-  /* this was sort of interesting but, nah */
+  /* This was sort of interesting but, nah */
   /* transform: translateX( var(--base-unit-half) ); */
   /* width: calc(var(--column-width) + var(--base-unit)); */
   width: var(--column-width);
@@ -411,7 +410,6 @@ hr {
   border: none;
   border-bottom: 1px solid var(--spot-color);
   break-after: avoid-column;
-  /* break-after: column; */
 }
 
 p.last-page {
@@ -519,7 +517,7 @@ div.book::before {
   width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
   height: 100vh;
 
-  /* specific to left shade */
+  /* Specific to left shade */
   left: 0;
   background: linear-gradient(to right,
                               var(--shade-color-origin) 0%,
@@ -536,7 +534,7 @@ div.book::after {
   width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
   height: 100vh;
 
-  /* specific to right shade */
+  /* Specific to right shade */
   right: 0;
   background: linear-gradient(to left,
                               var(--shade-color-origin) 0%,
@@ -545,7 +543,7 @@ div.book::after {
 }
 
 /* PRINT STYLES */
-/* this is a mess... */
+/* This is a mess... */
 
 div.print-cover {
   display: none;
@@ -617,7 +615,7 @@ div.print-cover div.title h2 {
   }
 
   div.bookmark {
-    top: calc( var(--vertical-padding) * -1.5 ); /* now THAT is a stupid magic number */
+    top: calc( var(--vertical-padding) * -1.5 ); /* Now THAT is a stupid magic number */
   }
 }
 
@@ -658,7 +656,7 @@ div.print-cover div.title h2 {
 
   div.book {
 
-    /* i really wanted columns to work for printing but... they do not */
+    /* I really wanted columns to work for printing but... they do not */
     column-count: 0;
     column-width: auto;
     column-gap: 0;
@@ -671,12 +669,11 @@ div.print-cover div.title h2 {
     height: auto;
 
     /*
-    column-width: auto;
     column-count: 2;
+    column-width: auto;
     column-gap: var(--base-unit);
     column-fill: auto;
     */
-
   }
 
   h2 {
@@ -689,8 +686,7 @@ div.print-cover div.title h2 {
 
     font-size: 1rem;
 
-    /* this isn't working :( */
-
+    /* This isn't working :( */
     break-before: page !important;
   }
 
@@ -699,7 +695,7 @@ div.print-cover div.title h2 {
   }
 
   small {
-    /* small caps weren't working correctly when actually printed, so! */
+    /* Small caps weren't working correctly when actually printed, so! */
     text-transform: none;
     font-size: 1.0rem;
     font-weight: 400;
