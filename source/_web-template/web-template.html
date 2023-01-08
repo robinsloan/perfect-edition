@@ -53,8 +53,8 @@ Kobayashi Issa
   // https://github.com/iamdustan/smoothscroll/blob/master/src/smoothscroll.js
 
   function smoothScroll(x, shouldTurnSlow) {
-    var startTime = performance.now();
-    var startX = document.body.scrollLeft;
+    const startTime = performance.now();
+    const startX = document.body.scrollLeft;
 
     // scroll
     smoothScrollStep({
@@ -72,24 +72,24 @@ Kobayashi Issa
   const SCROLL_TIME_FAST = 200; // millis
   const SCROLL_TIME_SLOW = 1000; // millis
 
-  function smoothScrollStep(context) {
-    let scrollTime = context.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
-    let elapsedTime = (performance.now() - context.startTime) / scrollTime;
+  function smoothScrollStep(status) {
+    const scrollTime = status.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
+    let elapsedTime = (performance.now() - status.startTime) / scrollTime;
 
     // avoid elapsed times higher than one
     elapsedTime = elapsedTime > 1 ? 1 : elapsedTime;
 
     // apply easing to elapsed time
-    let easedValue = ease(elapsedTime);
+    const easedValue = ease(elapsedTime);
 
-    let currentX = context.startX + (context.x - context.startX) * easedValue;
+    const currentX = status.startX + (status.x - status.startX) * easedValue;
 
     document.body.scrollLeft = currentX;
 
     // keep scrolling if we have not reached our destination
     // this was > 1.0 and that wasn't working for some reason
-    if (Math.abs(currentX - context.x) > 2.0) {
-      requestAnimationFrame(smoothScrollStep.bind(window, context));
+    if (Math.abs(currentX - status.x) > 2.0) {
+      requestAnimationFrame(smoothScrollStep.bind(window, status));
     }
   }
 
@@ -104,7 +104,7 @@ Kobayashi Issa
   function getRect(element) {
     // terrible hack for Firefox, which treats getBoundingClientRect as an
     // inner dimension for some unknown reason:
-    let rects = element.getClientRects();
+    const rects = element.getClientRects();
     return rects[rects.length - 1];
   }
 
@@ -121,14 +121,14 @@ Kobayashi Issa
   }
 
   function turnPage(turnDirection, shouldTurnSlow) {
-    let currentLeftOffset = document.body.scrollLeft;
-    let columnWidth = getComputed("column-width");
-    let columnGap = getComputed("column-gap");
-    let columnTotal = columnWidth + columnGap;
+    const currentLeftOffset = document.body.scrollLeft;
+    const columnWidth = getComputed("column-width");
+    const columnGap = getComputed("column-gap");
+    const columnTotal = columnWidth + columnGap;
 
     // this was previously Math.floor which was causing problems when
     // paging backwards
-    let closestPageNumber = Math.round(currentLeftOffset / columnTotal) +
+    const closestPageNumber = Math.round(currentLeftOffset / columnTotal) +
       turnDirection;
 
     writePageNumber(closestPageNumber);
@@ -144,11 +144,11 @@ Kobayashi Issa
 
     // you can't turn the page if you're at the end
     if (
-        (turnDirection > 0) &&
-        (getRect(endElement).x <= (window.innerWidth + columnGap))
+      (turnDirection > 0) &&
+      (getRect(endElement).x <= (window.innerWidth + columnGap))
     ) {
-        console.log("thud");
-        return;
+      console.log("thud");
+      return;
     }
 
     // if we're turning a page, we are navigating away from a chapter title,
@@ -159,11 +159,11 @@ Kobayashi Issa
   }
 
   function turnToPage(pageNumber) {
-    let columnWidth = getComputed("column-width");
-    let columnGap = getComputed("column-gap");
-    let columnTotal = columnWidth + columnGap;
+    const columnWidth = getComputed("column-width");
+    const columnGap = getComputed("column-gap");
+    const columnTotal = columnWidth + columnGap;
 
-    var pageEdge = pageNumber * columnTotal;
+    const pageEdge = pageNumber * columnTotal;
     if (pageEdge > bookElement.scrollWidth) {
       // Page number is greater than total number of pages currently displayed
       // (this isn't uncommon, because of reflow for different window sizes)
@@ -180,7 +180,7 @@ Kobayashi Issa
   }
 
   function turnToAnchor(anchor) {
-    let editedAnchor = "chapter_" + anchor.replace("#", "");
+    const editedAnchor = "chapter_" + anchor.replace("#", "");
 
     let anchoredHeading = Array.from(document.querySelectorAll("h2"))
       .find((heading) => {
@@ -189,9 +189,9 @@ Kobayashi Issa
 
     anchoredHeading.scrollIntoView();
 
-    let wherePageEdgeShouldBe = (window.innerWidth - getRect(bookElement).width) /
-      2.0;
-    let offset = getRect(anchoredHeading).x - wherePageEdgeShouldBe;
+    const wherePageEdgeShouldBe =
+      (window.innerWidth - getRect(bookElement).width) / 2.0;
+    const offset = getRect(anchoredHeading).x - wherePageEdgeShouldBe;
 
     document.body.scrollLeft += offset;
   }
@@ -216,7 +216,7 @@ Kobayashi Issa
   }
 
   function readPageNumber() {
-    let pageNumber = Number(window.localStorage.getItem("pageNumber"));
+    const pageNumber = Number(window.localStorage.getItem("pageNumber"));
     if (pageNumber > 1) {
       turnToPage(pageNumber);
     }
@@ -266,7 +266,7 @@ Kobayashi Issa
 
     // toc text size buttons
     document.querySelectorAll("nav div.controls button").forEach((button) => {
-      let size = `${baseFontSize * button.dataset.scale}px`;
+      const size = `${baseFontSize * button.dataset.scale}px`;
       button.style.fontSize = size;
 
       button.addEventListener("click", (e) => {
@@ -286,7 +286,7 @@ Kobayashi Issa
       );
 
       document.querySelectorAll("nav div.controls button").forEach((button) => {
-        let size = `${realFontSize * button.dataset.scale}px`;
+        const size = `${realFontSize * button.dataset.scale}px`;
         button.style.fontSize = size;
 
         button.addEventListener("click", (e) => {
@@ -337,7 +337,7 @@ Kobayashi Issa
   const LONG_PRESS_TIME = 250;
 
   document.addEventListener("click", function (e) {
-    let now = Date.now();
+    const now = Date.now();
 
     // don't advance on long press (text selection?)
     if ((now - lastMouseDown) > LONG_PRESS_TIME) {

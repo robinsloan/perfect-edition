@@ -10,9 +10,9 @@ require "securerandom"
 
 def normalize_html(html)
   html.each_line.inject("") do |html, line|
-    if line != "\n"
-      html += line.strip + "\n"
-    end
+    # if line isn't nil, strip it and append one newline
+    # if it is nil (??) just append a newline
+    html += line ? line.strip + "\n" : "\n"
   end
 end
 
