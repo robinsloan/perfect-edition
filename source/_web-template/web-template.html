@@ -200,7 +200,7 @@ Kobayashi Issa
   function setTextScale(scale) {
     document.documentElement.style.setProperty(
       "--font-size",
-      `${baseFontSize * scale}px`,
+      `${BASE_FONT_SIZE * scale}px`,
     );
   }
 
@@ -223,11 +223,17 @@ Kobayashi Issa
     }
   }
 
+  // values in millis
+  const CLICK_DEBOUNCE_TIME = 50;
+  const LONG_PRESS_TIME = 250;
+
+  // value in px
+  const BASE_FONT_SIZE = 18.0;
+
   var bookElement;
   var navElement;
   var endElement;
   var scrollTimer;
-  var baseFontSize = 18.0;
   var lastMouseDown = Date.now();
   var lastClick = Date.now();
 
@@ -236,7 +242,8 @@ Kobayashi Issa
     navElement = document.querySelector("nav");
     endElement = document.querySelector("p.last-page");
 
-    if (window.location.hash.length > 1) { // > 1, because an empty "#" is length 1
+    if (window.location.hash.length > 1) {
+      // > 1, because an empty "#" is length 1
       turnToAnchor(window.location.hash);
     } else {
       readPageNumber();
@@ -254,20 +261,22 @@ Kobayashi Issa
     });
 
     // toc button
-    document.querySelector("button.toc-button").addEventListener("click", (e) => {
-      toggleNav();
-      e.stopPropagation();
+    document.querySelector("button.toc-button")
+      .addEventListener("click", (e) => {
+        toggleNav();
+        e.stopPropagation();
     });
 
     // close button
-    document.querySelector("div.close-button").addEventListener("click", (e) => {
-      toggleNav();
-      e.stopPropagation();
+    document.querySelector("div.close-button")
+      .addEventListener("click", (e) => {
+        toggleNav();
+        e.stopPropagation();
     });
 
     // toc text size buttons
     document.querySelectorAll("nav div.controls button").forEach((button) => {
-      const size = `${baseFontSize * button.dataset.scale}px`;
+      const size = `${BASE_FONT_SIZE * button.dataset.scale}px`;
       button.style.fontSize = size;
 
       button.addEventListener("click", (e) => {
@@ -286,16 +295,17 @@ Kobayashi Issa
           .replace("px", ""),
       );
 
-      document.querySelectorAll("nav div.controls button").forEach((button) => {
-        const size = `${realFontSize * button.dataset.scale}px`;
-        button.style.fontSize = size;
+      document.querySelectorAll("nav div.controls button")
+        .forEach((button) => {
+          const size = `${realFontSize * button.dataset.scale}px`;
+          button.style.fontSize = size;
 
-        button.addEventListener("click", (e) => {
-          setTextScale(e.target.dataset.scale);
-          e.stopPropagation();
+          button.addEventListener("click", (e) => {
+            setTextScale(e.target.dataset.scale);
+            e.stopPropagation();
         });
       });
-    }, 1000);
+    }, 1000); // for the setTimeout, waaay up above!
 
     // toc chapter links
     document.querySelectorAll("nav a").forEach((link) => {
@@ -332,10 +342,6 @@ Kobayashi Issa
   document.addEventListener("mousedown", function (e) {
     lastMouseDown = Date.now();
   });
-
-  // values in millis
-  const CLICK_DEBOUNCE_TIME = 50;
-  const LONG_PRESS_TIME = 250;
 
   document.addEventListener("click", function (e) {
     const now = Date.now();
