@@ -73,11 +73,12 @@ Kobayashi Issa
   const SCROLL_TIME_SLOW = 1000; // millis
 
   function smoothScrollStep(status) {
-    const scrollTime = status.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
+    const scrollTime =
+      status.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
     let elapsedTime = (performance.now() - status.startTime) / scrollTime;
 
     // avoid elapsed times higher than one
-    elapsedTime = elapsedTime > 1 ? 1 : elapsedTime;
+    elapsedTime = elapsedTime > 1.0 ? 1.0 : elapsedTime;
 
     // apply easing to elapsed time
     const easedValue = ease(elapsedTime);
@@ -128,8 +129,8 @@ Kobayashi Issa
 
     // this was previously Math.floor which was causing problems when
     // paging backwards
-    const closestPageNumber = Math.round(currentLeftOffset / columnTotal) +
-      turnDirection;
+    const closestPageNumber =
+      Math.round(currentLeftOffset / columnTotal) + turnDirection;
 
     writePageNumber(closestPageNumber);
 
@@ -163,7 +164,7 @@ Kobayashi Issa
     const columnGap = getComputed("column-gap");
     const columnTotal = columnWidth + columnGap;
 
-    const pageEdge = pageNumber * columnTotal;
+    let pageEdge = pageNumber * columnTotal;
     if (pageEdge > bookElement.scrollWidth) {
       // Page number is greater than total number of pages currently displayed
       // (this isn't uncommon, because of reflow for different window sizes)
@@ -182,8 +183,8 @@ Kobayashi Issa
   function turnToAnchor(anchor) {
     const editedAnchor = "chapter_" + anchor.replace("#", "");
 
-    let anchoredHeading = Array.from(document.querySelectorAll("h2"))
-      .find((heading) => {
+    let anchoredHeading =
+      Array.from(document.querySelectorAll("h2")).find((heading) => {
         return heading.getAttribute("id") == editedAnchor;
       });
 
