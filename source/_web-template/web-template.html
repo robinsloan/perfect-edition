@@ -83,20 +83,21 @@ Kobayashi Issa
       status.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
     let elapsedTime = (performance.now() - status.startTime) / scrollTime;
 
-    // avoid elapsed times higher than one
+    // Just in case... avoid elapsed times higher than 1.0:
     elapsedTime = elapsedTime > 1.0 ? 1.0 : elapsedTime;
 
-    // apply easing to elapsed time
+    // Apply easing to elapsed time:
     const easedValue = ease(elapsedTime);
 
+    // Based on that easing curve, where should we be?
     const currentX =
       status.startX + (status.targetX - status.startX) * easedValue;
 
     document.body.scrollLeft = currentX;
 
-    // keep scrolling if we have not reached our destination
-    // this was > 1.0 and that wasn't working for some reason
+    // If we haven't reached our destination yet ...
     if (Math.abs(currentX - status.targetX) > 2.0) {
+      // ... keep scrolling!
       requestAnimationFrame(smoothScrollStep.bind(window, status));
     }
   }
@@ -166,7 +167,7 @@ Kobayashi Issa
     // of our target page number?
     let closestPageEdge = targetPageNumber * columnTotal;
 
-    // This is an edge case that I don't totally remember...
+    // This is an edge case that I don't totally remember ...
     // It'll return to me at some point, I'm sure.
     // 8.0 pixels is for sure a magic number, sorry!
     if (Math.abs(closestPageEdge - currentLeftOffset) < 8.0) {
@@ -195,7 +196,7 @@ Kobayashi Issa
   // This function turns, without any animation, to a particular numbered page.
   // It's a bit flaky because "page numbers" can change completely based on
   // browser size -- this is a responsive, reflowable layout.
-  // But, better to have the capability than not... maybe?
+  // But, better to have the capability than not ... maybe?
   function turnToPage(pageNumber) {
     const columnWidth = getComputed("column-width");
     const columnGap = getComputed("column-gap");
@@ -233,7 +234,7 @@ Kobayashi Issa
 
     targetHeading.scrollIntoView();
 
-    // This gets us part of the way there... but we have more to do.
+    // This gets us part of the way there ... but we have more to do.
     // scrollIntoView() doesn't know the niceties of our layout --
     // as long as the targetHeading is barely visible, it's happy.
     // WE HOWEVER ARE NOT.
@@ -323,7 +324,7 @@ Kobayashi Issa
         clearTimeout(scrollTimer);
       }
 
-      // Wait... then snap:
+      // Wait ... then snap:
       scrollTimer = setTimeout(() => {
         snapToCurrentPage();
       }, 1000);
@@ -366,7 +367,7 @@ Kobayashi Issa
     // This next bit is hacky, but/and it allows us to respond appropriately
     // to user changes to overall browser font size, e.g. with ⌘+ and ⌘-.
     // We want our font size options to be built "around" that user-selected
-    // font size... right? (I might be overthinking this.)
+    // font size ... right? (I might be overthinking this.)
     // We have to wrap this in a setTimeout because the computed font size,
     // reflecting the user-selected font size, isn't available at the moment
     // DOMContentLoaded fires -- shocking!
@@ -379,7 +380,7 @@ Kobayashi Issa
           .replace("px", ""),
       );
 
-      // So... basically we now redo what we did above, setting up those
+      // So ... basically we now redo what we did above, setting up those
       // click handlers for the text scale options.
       document.querySelectorAll("nav div.controls button")
         .forEach((button) => {
@@ -437,13 +438,13 @@ Kobayashi Issa
 
   // Handle clicks, which generally turn the page -- ALTHOUGH you might notice
   // that most of this code is devoted to looking for reasons NOT to turn
-  // the page...
+  // the page ...
   document.addEventListener("click", function (e) {
     const now = Date.now();
 
     // Don't turn the page on long press (e.g., mobile text selection).
     // "click" events register on mouseup, so we are saying, if it's been
-    // a looong time since mousedown... don't turn the page
+    // a looong time since mousedown ... don't turn the page
     if ((now - lastMouseDown) > LONG_PRESS_TIME) {
       return;
     }
@@ -468,7 +469,7 @@ Kobayashi Issa
       return;
     }
 
-    // Okay, there's no avoiding it... turn the page.
+    // Okay, there's no avoiding it ... turn the page.
     // Clicks in the left 1/3 of the screen turn back,
     // click in the right 2/3 turn forward
     if (e.clientX < (window.innerWidth / 3.0)) {
