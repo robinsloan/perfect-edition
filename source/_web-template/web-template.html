@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-
 Don't worry, spiders,
 I keep house
 casually.
 
 Kobayashi Issa
-
 -->
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="The hands of the scribes" />
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, user-scalable=0.0" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,39 +31,43 @@ Kobayashi Issa
   <meta name="twitter:image" content="{{ home_url }}{{ cover_image }}" />
   {% endif %}
 
-  <script type="application/ld+json">
-      {
-          "@context": "http://schema.org",
-          "@type": "Book",
-          "name": "{{ title }}",
-          "author": "{{ author }}",
-          "description": "{{ description }}",
-          "url": "{{ home_url }}"
-      }
-  </script>
-
-  <meta name="generator" content="These human fingers" />
-
+  <title>{{ title }}</title>
   <link href="css/web-book-{{ guid }}.css" type="text/css" rel="stylesheet" />
 
-  <title>{{ title }}</title>
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Book",
+    "name": "{{ title }}",
+    "author": "{{ author }}",
+    "description": "{{ description }}",
+    "url": "{{ home_url }}"
+  }
+  </script>
+
   <script type="text/javascript">
+  // -- Side-to-side scrolling support --
 
+  // This is the function that kicks off a side-to-side page scroll.
+  // It is taken from:
   // https://github.com/iamdustan/smoothscroll/blob/master/src/smoothscroll.js
-
-  function smoothScroll(x, shouldTurnSlow) {
+  function smoothScroll(targetX, shouldTurnSlow) {
     const startTime = performance.now();
     const startX = document.body.scrollLeft;
 
-    // scroll
+    // After this initial invocation, the smoothScrollStep function
+    // calls itself again & again until we've scrolled to targetX.
     smoothScrollStep({
       startTime: startTime,
       startX: startX || 0,
-      x: x || 0,
+      targetX: targetX || 0,
       shouldTurnSlow: shouldTurnSlow
     });
   }
 
+  // This easing function returns a relative "how far you should be"
+  // value in the range 0.0-1.0 for an input "time elapsed" value,
+  // also relative, in the range 0.0-1.0
   function ease(k) {
     return (-Math.pow(2, -10 * k) + 1);
   }
@@ -72,6 +75,9 @@ Kobayashi Issa
   const SCROLL_TIME_FAST = 200; // millis
   const SCROLL_TIME_SLOW = 1000; // millis
 
+  // This function passes this status object back to itself
+  // on successive animation frames: a way of keeping track
+  // of how far it has scrolled & how far remains.
   function smoothScrollStep(status) {
     const scrollTime =
       status.shouldTurnSlow ? SCROLL_TIME_SLOW : SCROLL_TIME_FAST;
@@ -83,17 +89,21 @@ Kobayashi Issa
     // apply easing to elapsed time
     const easedValue = ease(elapsedTime);
 
-    const currentX = status.startX + (status.x - status.startX) * easedValue;
+    const currentX =
+      status.startX + (status.targetX - status.startX) * easedValue;
 
     document.body.scrollLeft = currentX;
 
     // keep scrolling if we have not reached our destination
     // this was > 1.0 and that wasn't working for some reason
-    if (Math.abs(currentX - status.x) > 2.0) {
+    if (Math.abs(currentX - status.targetX) > 2.0) {
       requestAnimationFrame(smoothScrollStep.bind(window, status));
     }
   }
 
+  // -- Utility --
+
+  // Look up the real pixel value of a property on the book DOM element
   function getComputed(propertyName) {
     return Number(
       getComputedStyle(bookElement)
@@ -102,12 +112,19 @@ Kobayashi Issa
     );
   }
 
+  // Look up the positioning rect of a DOM element
   function getRect(element) {
     // terrible hack for Firefox, which treats getBoundingClientRect as an
     // inner dimension for some unknown reason:
     const rects = element.getClientRects();
     return rects[rects.length - 1];
   }
+
+  // -- Page turning --
+
+  // First: here are legible aliases for our page turn functions.
+  // The idea is to "say what you really want" elsewhere in this code
+  // rather than cryptically call turnPage(-1, false)
 
   function turnPageForward() {
     turnPage(1, false);
@@ -117,48 +134,68 @@ Kobayashi Issa
     turnPage(-1, false);
   }
 
-  function snapToPage() {
+  function snapToCurrentPage() {
     turnPage(0, true);
   }
 
+  // As you can tell from the functions above, turnPage accepts
+  // a turnDirection parameter that can be
+  //  1: turn forward
+  // -1: turn back
+  //  0: turn to "this page", i.e., re-center it
   function turnPage(turnDirection, shouldTurnSlow) {
+    // Where are we?
     const currentLeftOffset = document.body.scrollLeft;
+
+    // How wide is one page, currently?
+    // TODO: maybe change these to `page*` instead of `column*`
     const columnWidth = getComputed("column-width");
     const columnGap = getComputed("column-gap");
     const columnTotal = columnWidth + columnGap;
 
-    // this was previously Math.floor which was causing problems when
-    // paging backwards
-    const closestPageNumber =
-      Math.round(currentLeftOffset / columnTotal) + turnDirection;
+    // Where are we, then, in terms of pages?
+    const currentPageNumber = Math.round(currentLeftOffset / columnTotal);
 
-    writePageNumber(closestPageNumber);
+    // Where do we want to be?
+    const targetPageNumber = currentPageNumber + turnDirection;
 
-    let closestPageEdge = closestPageNumber * columnTotal;
+    // Let's pre-emptively record our target page number:
+    writePageNumber(targetPageNumber);
 
-    // aha, but what if we are already AT that page?
-    // 8.0 pixels is a bit of a "magic number"...
+    // Working backwards, what's the x-coordinate of the left edge
+    // of our target page number?
+    let closestPageEdge = targetPageNumber * columnTotal;
+
+    // This is an edge case that I don't totally remember...
+    // It'll return to me at some point, I'm sure.
+    // 8.0 pixels is for sure a magic number, sorry!
     if (Math.abs(closestPageEdge - currentLeftOffset) < 8.0) {
       closestPageEdge += columnTotal * turnDirection;
-      writePageNumber(closestPageNumber + 1); // hacky
+      writePageNumber(targetPageNumber + 1); // hacky
     }
 
-    // you can't turn the page if you're at the end
+    // Hold up -- you can't turn to the next page if you're at the
+    // end of the book!
     if (
       (turnDirection > 0) &&
       (getRect(endElement).x <= (window.innerWidth + columnGap))
     ) {
-      console.log("thud");
+      // If that's the case, return without scrolling:
       return;
     }
 
-    // if we're turning a page, we are navigating away from a chapter title,
-    // so we want to clear this out
+    // If we previously navigated using a chapter link, we want to clear
+    // that hash out of the URL, because we're now on a different page:
     window.location.hash = "";
 
+    // After all this, we are finally ready to scroll:
     smoothScroll(closestPageEdge, shouldTurnSlow);
   }
 
+  // This function turns, without any animation, to a particular numbered page.
+  // It's a bit flaky because "page numbers" can change completely based on
+  // browser size -- this is a responsive, reflowable layout.
+  // But, better to have the capability than not... maybe?
   function turnToPage(pageNumber) {
     const columnWidth = getComputed("column-width");
     const columnGap = getComputed("column-gap");
@@ -166,36 +203,56 @@ Kobayashi Issa
 
     let pageEdge = pageNumber * columnTotal;
     if (pageEdge > bookElement.scrollWidth) {
-      // Page number is greater than total number of pages currently displayed
-      // (this isn't uncommon, because of reflow for different window sizes)
-      // so, let's just go the end. Not a perfect solution, fine for now
+      // In this case, the page number is greater than total number of pages
+      // currently available. Again, this isn't uncommon, because of reflow.
+      // So, we'll just go the end of the book.
       pageEdge = bookElement.scrollWidth - (columnTotal + columnWidth);
     }
 
-    // the cute tiny bookmark
-    let bookmarkElement = document.querySelector("div.bookmark");
+    // Display the cute bookmark so people get the idea that they have
+    // returned to a saved location:
+    const bookmarkElement = document.querySelector("div.bookmark");
     bookmarkElement.style.display = "block";
     bookmarkElement.style.left = `${pageEdge + columnWidth / 2.0}px`;
 
     document.body.scrollLeft = pageEdge;
   }
 
-  function turnToAnchor(anchor) {
-    const editedAnchor = "chapter_" + anchor.replace("#", "");
+  // This function turns, without any animation, to a particular hash,
+  // which we use to link directly to a chapter.
+  // The function expects the raw hash from the URL -- # included.
+  function turnToChapter(rawHash) {
+    // Convert the raw hash to the element id scheme used in the book HTML:
+    const id = "chapter_" + rawHash.replace("#", "");
 
-    let anchoredHeading =
+    // Now, find the <h2> element with that id.
+    let targetHeading =
       Array.from(document.querySelectorAll("h2")).find((heading) => {
-        return heading.getAttribute("id") == editedAnchor;
+        return heading.getAttribute("id") == id;
       });
 
-    anchoredHeading.scrollIntoView();
+    targetHeading.scrollIntoView();
 
+    // This gets us part of the way there... but we have more to do.
+    // scrollIntoView() doesn't know the niceties of our layout --
+    // as long as the targetHeading is barely visible, it's happy.
+    // WE HOWEVER ARE NOT.
+    // To calculate the misalignment, we need to know where, in window
+    // coordinates, the left edge of our page should be.
+    // |------------------- window.innerWidth -------------------|
+    //       this edge -> | bookElement.width |
     const wherePageEdgeShouldBe =
       (window.innerWidth - getRect(bookElement).width) / 2.0;
-    const offset = getRect(anchoredHeading).x - wherePageEdgeShouldBe;
 
-    document.body.scrollLeft += offset;
+    // Next, we see how far off the mark we are:
+    const misalignment = getRect(targetHeading).x - wherePageEdgeShouldBe;
+
+    // Finally, we compensate:
+    document.body.scrollLeft += misalignment;
   }
+
+  // -- TOC and config --
+  // These functions are all very simple and, I believe, self-explanatory.
 
   function setTextScale(scale) {
     document.documentElement.style.setProperty(
@@ -223,58 +280,79 @@ Kobayashi Issa
     }
   }
 
-  // values in millis
-  const CLICK_DEBOUNCE_TIME = 50;
-  const LONG_PRESS_TIME = 250;
+  // -- Setup --
 
-  // value in px
-  const BASE_FONT_SIZE = 18.0;
+  const CLICK_DEBOUNCE_TIME = 50; // millis
+  const LONG_PRESS_TIME = 250; // millis
 
+  const BASE_FONT_SIZE = 18.0; // px
+
+  // These are globals where we will cache these elements
+  // so we don't have to querySelector() them every time:
   var bookElement;
   var navElement;
   var endElement;
+
+  // These are globals used to keep track of a few things used below:
   var scrollTimer;
   var lastMouseDown = Date.now();
   var lastClick = Date.now();
 
+  // Here is the big setup function:
   document.addEventListener("DOMContentLoaded", (e) => {
     bookElement = document.querySelector("div.book");
     navElement = document.querySelector("nav");
     endElement = document.querySelector("p.last-page");
 
+    // Does the URL have a hash, indicating a link directly to a chapter?
+    // The length check is > 1 because an empty hash "#" is length 1
     if (window.location.hash.length > 1) {
-      // > 1, because an empty "#" is length 1
-      turnToAnchor(window.location.hash);
+      turnToChapter(window.location.hash);
     } else {
       readPageNumber();
     }
 
-    // Following a free scroll, this snaps to the nearest page.
+    // Here's the scroll "re-adjustment" handler
+    // After a free scroll, we wait for a beat (1000 millis, to be exact)
+    // and then snap our scroll position to a page edge.
+    // We put this here in the DOMContentLoaded handler because we need
+    // this `body` element to be ready!
     document.body.addEventListener("scroll", (e) => {
+      // Were we already waiting to snap? If so, forget that:
       if (scrollTimer) {
         clearTimeout(scrollTimer);
       }
 
+      // Wait... then snap:
       scrollTimer = setTimeout(() => {
-        snapToPage();
+        snapToCurrentPage();
       }, 1000);
     });
 
-    // toc button
+    // Handle click on the TOC button:
     document.querySelector("button.toc-button")
       .addEventListener("click", (e) => {
         toggleNav();
         e.stopPropagation();
     });
 
-    // close button
+    // Handle click on the close button, inside the TOC:
     document.querySelector("div.close-button")
       .addEventListener("click", (e) => {
         toggleNav();
         e.stopPropagation();
     });
 
-    // toc text size buttons
+    // Add click handlers to the chapter titles in the TOC
+    document.querySelectorAll("nav a").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        toggleNav();
+        turnToChapter(e.target.getAttribute("href"));
+        e.stopPropagation();
+      });
+    });
+
+    // Add click handlers to the text scale options in the TOC:
     document.querySelectorAll("nav div.controls button").forEach((button) => {
       const size = `${BASE_FONT_SIZE * button.dataset.scale}px`;
       button.style.fontSize = size;
@@ -285,16 +363,24 @@ Kobayashi Issa
       });
     });
 
-    // this is hacky, but I'm not sure of a better way to wait for
-    // style to be applied/computed. The getComputedStyle info isn't yet
-    // available when DOMContentLoaded fires.
+    // This next bit is hacky, but/and it allows us to respond appropriately
+    // to user changes to overall browser font size, e.g. with ⌘+ and ⌘-.
+    // We want our font size options to be built "around" that user-selected
+    // font size... right? (I might be overthinking this.)
+    // We have to wrap this in a setTimeout because the computed font size,
+    // reflecting the user-selected font size, isn't available at the moment
+    // DOMContentLoaded fires -- shocking!
     setTimeout(function () {
+      // So what IS the font-size of this document, reflecting any changes
+      // by the user?
       let realFontSize = Number(
         getComputedStyle(document.documentElement)
           .getPropertyValue("font-size")
           .replace("px", ""),
       );
 
+      // So... basically we now redo what we did above, setting up those
+      // click handlers for the text scale options.
       document.querySelectorAll("nav div.controls button")
         .forEach((button) => {
           const size = `${realFontSize * button.dataset.scale}px`;
@@ -305,70 +391,86 @@ Kobayashi Issa
             e.stopPropagation();
         });
       });
-    }, 1000); // for the setTimeout, waaay up above!
+    }, 1000); // end of setTimeout
 
-    // toc chapter links
-    document.querySelectorAll("nav a").forEach((link) => {
-      link.addEventListener("click", (e) => {
-        toggleNav();
-        turnToAnchor(e.target.getAttribute("href"));
-        e.stopPropagation();
-      });
-    });
+    // TODO: The more I think about the text scale bit above, the more I think
+    // it is dumb. Maybe there's a better/cleaner approach.
   });
 
+
+  // -- More controls --
+  // We can set these up outside the DOMContentLoaded handler, they are eternal
+
+  // Handle keyboard controls:
   document.addEventListener("keydown", (e) => {
-    if (event.keyCode === 37) { // left
+    // Left arrow
+    if (event.keyCode === 37) {
       e.preventDefault();
       turnPageBack();
     }
-    if ((event.keyCode === 39) || (event.keyCode === 32)) { // right, space
+    // Right arrow, space bar
+    if ((event.keyCode === 39) || (event.keyCode === 32)) {
       e.preventDefault();
       turnPageForward();
     }
   });
 
+  // Handle the scroll wheel:
   document.addEventListener("wheel", (e) => {
+    // Don't override the scroll wheel if the user
+    // is browsing the TOC
     if (navElement.className == "visible") {
       return;
     }
 
+    // I don't remember why we do this check
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       e.preventDefault();
       document.body.scrollLeft += e.deltaY;
     }
   }, { passive: false });
 
+  // Keep track of mousedowns, to calculate timings for events below:
   document.addEventListener("mousedown", function (e) {
     lastMouseDown = Date.now();
   });
 
+  // Handle clicks, which generally turn the page -- ALTHOUGH you might notice
+  // that most of this code is devoted to looking for reasons NOT to turn
+  // the page...
   document.addEventListener("click", function (e) {
     const now = Date.now();
 
-    // don't advance on long press (text selection?)
+    // Don't turn the page on long press (e.g., mobile text selection).
+    // "click" events register on mouseup, so we are saying, if it's been
+    // a looong time since mousedown... don't turn the page
     if ((now - lastMouseDown) > LONG_PRESS_TIME) {
       return;
     }
 
-    // don't advance on double-click
+    // Don't turn the page on the second click in a double-click:
     if ((now - lastClick) < CLICK_DEBOUNCE_TIME) {
       return;
     }
 
+    // But do record the timing of this click:
     lastClick = now;
 
-    // don't advance on link click
+    // (Why are people double-clicking? I don't know.)
+
+    // Don't turn page if the user clicked a link:
     if (e.target.tagName == "A") {
       return;
     }
 
-    // don't advance if we are selecting text
+    // Don't turn the page if the user is selecting text:
     if (window.getSelection().toString().length > 0) {
       return;
     }
 
-    // ok... u can advance
+    // Okay, there's no avoiding it... turn the page.
+    // Clicks in the left 1/3 of the screen turn back,
+    // click in the right 2/3 turn forward
     if (e.clientX < (window.innerWidth / 3.0)) {
       turnPageBack();
     } else {
@@ -376,20 +478,26 @@ Kobayashi Issa
     }
   });
 
-  // hash change detector
-  // note: it's a window event, not a document event
+  // Detect changes in the URL hash, which we use for chapter titles.
+  // Note that this is a window event, not a document event
   window.addEventListener("hashchange", (e) => {
     if (window.location.hash.length > 1) {
-      turnToAnchor(window.location.hash);
+      turnToChapter(window.location.hash);
     }
   });
 
   </script>
 </head>
 
+<!--
+When it comes to HTML readability, I find excessive indentation less helpful
+than thoughtful spacing. Generally, I only use 1-2 levels of indentation total.
+-->
+
 <body>
 
 <nav class="invisible">
+
 <div class="controls">
   <button data-scale="0.8">A</button>
   <button data-scale="1.0">A</button>
@@ -399,22 +507,25 @@ Kobayashi Issa
 </div>
 
 <div class="toc">
-<h1>Table of Contents</h1>
-<div class="close-button">
+  <h1>Table of Contents</h1>
+
+  <div class="close-button">
   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 10 10" xml:space="preserve">
-  <g>
+    <g>
     <line x1="0" y1="0" x2="10" y2="10" vector-effect="non-scaling-stroke" />
     <line x1="10" y1="0" x2="0" y2="10" vector-effect="non-scaling-stroke" />
-  </g>
-</svg>
+    </g>
+  </svg>
+  </div> <!-- close-button -->
+
+  {{ web_toc_html }}
 </div>
-{{ web_toc_html }}
-</div>
+
 </nav>
 
 <div class="print-cover">
 {{ title_html }}
-</div>
+</div> <!-- print-cover -->
 
 <div class="book">
 
@@ -424,7 +535,7 @@ Kobayashi Issa
   <p><i>On a computer:</i><br/>Click the edges of the page, or use the arrow keys, the&nbsp;space&nbsp;bar, the&nbsp;trackpad, or&nbsp;the&nbsp;scroll&nbsp;wheel</p>
   <p><i>On paper:</i></br>Print it out</p>
   <p>Basically, <small>everything works</small></p>
-</div>
+</div> <!-- tutorial -->
 
 <img class="cover" src="{{ cover_image }}" alt="" />
 {{ title_html }}
@@ -434,23 +545,23 @@ Kobayashi Issa
 <div class="bookmark">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 40 80" xml:space="preserve">
   <g>
-    <polygon points="0,0 0,80 20,70 40,80 40,0"/>
+  <polygon points="0,0 0,80 20,70 40,80 40,0"/>
   </g>
 </svg>
-</div>
+</div> <!-- bookmark -->
 
-</div>
+</div> <!-- book -->
 
 <button class="toc-button">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="100%" height="100%" viewBox="0 0 80 40" xml:space="preserve">
   <g>
-    <rect x="0" y="10" width="5" height="1" />
-    <rect x="0" y="20" width="5" height="1" />
-    <rect x="0" y="30" width="5" height="1" />
+  <rect x="0" y="10" width="5" height="1" />
+  <rect x="0" y="20" width="5" height="1" />
+  <rect x="0" y="30" width="5" height="1" />
 
-    <rect x="10" y="10" width="70" height="1" />
-    <rect x="10" y="20" width="70" height="1" />
-    <rect x="10" y="30" width="70" height="1" />
+  <rect x="10" y="10" width="70" height="1" />
+  <rect x="10" y="20" width="70" height="1" />
+  <rect x="10" y="30" width="70" height="1" />
   </g>
 </svg>
 </button>
