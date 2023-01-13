@@ -160,9 +160,6 @@ Kobayashi Issa
     // Where do we want to be?
     const targetPageNumber = currentPageNumber + turnDirection;
 
-    // Let's pre-emptively record our target page number:
-    writePageNumber(targetPageNumber);
-
     // Working backwards, what's the x-coordinate of the left edge
     // of our target page number?
     let closestPageEdge = targetPageNumber * columnTotal;
@@ -184,6 +181,9 @@ Kobayashi Issa
       // If that's the case, return without scrolling:
       return;
     }
+
+    // Now it's OK to write our page number:
+    writePageNumber(targetPageNumber);
 
     // If we previously navigated using a chapter link, we want to clear
     // that hash out of the URL, because we're now on a different page:
@@ -263,6 +263,10 @@ Kobayashi Issa
   }
 
   function toggleNav() {
+    if (navElement == null) {
+      return;
+    }
+
     if (navElement.className == "invisible") {
       navElement.className = "visible";
     } else {
@@ -302,7 +306,7 @@ Kobayashi Issa
   // Here is the big setup function:
   document.addEventListener("DOMContentLoaded", (e) => {
     bookElement = document.querySelector("div.book");
-    navElement = document.querySelector("nav");
+    navElement = document.querySelector("nav"); // This might be null!
     endElement = document.querySelector("p.last-page");
 
     // Does the URL have a hash, indicating a link directly to a chapter?
@@ -330,22 +334,20 @@ Kobayashi Issa
       }, 1000);
     });
 
-    // Handle click on the TOC button:
-    document.querySelector("button.toc-button")
-      .addEventListener("click", (e) => {
+    // Handle click on the TOC button, if it exists:
+    document.querySelector("button.toc-button")?.addEventListener("click", (e) => {
         toggleNav();
         e.stopPropagation();
     });
 
-    // Handle click on the close button, inside the TOC:
-    document.querySelector("div.close-button")
-      .addEventListener("click", (e) => {
+    // Handle click on the close button, if it exists:
+    document.querySelector("div.close-button")?.addEventListener("click", (e) => {
         toggleNav();
         e.stopPropagation();
     });
 
-    // Add click handlers to the chapter titles in the TOC
-    document.querySelectorAll("nav a").forEach((link) => {
+    // Add click handlers to the chapter titles in the TOC, if they exist:
+    document.querySelectorAll("nav a")?.forEach((link) => {
       link.addEventListener("click", (e) => {
         toggleNav();
         turnToChapter(e.target.getAttribute("href"));
@@ -353,8 +355,8 @@ Kobayashi Issa
       });
     });
 
-    // Add click handlers to the text scale options in the TOC:
-    document.querySelectorAll("nav div.controls button").forEach((button) => {
+    // Add click handlers to the text scale options in the TOC, if they exist:
+    document.querySelectorAll("nav div.controls button")?.forEach((button) => {
       const size = `${BASE_FONT_SIZE * button.dataset.scale}px`;
       button.style.fontSize = size;
 
@@ -382,8 +384,8 @@ Kobayashi Issa
 
       // So ... basically we now redo what we did above, setting up those
       // click handlers for the text scale options.
-      document.querySelectorAll("nav div.controls button")
-        .forEach((button) => {
+      // (if they exist)
+      document.querySelectorAll("nav div.controls button")?.forEach((button) => {
           const size = `${realFontSize * button.dataset.scale}px`;
           button.style.fontSize = size;
 
@@ -419,8 +421,9 @@ Kobayashi Issa
   // Handle the scroll wheel:
   document.addEventListener("wheel", (e) => {
     // Don't override the scroll wheel if the user
-    // is browsing the TOC
-    if (navElement.className == "visible") {
+    // is browsing the TOC.
+    // Be sure to use safe navigation for the TOC element:
+    if (navElement?.className == "visible") {
       return;
     }
 

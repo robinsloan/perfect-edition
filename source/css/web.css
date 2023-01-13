@@ -29,20 +29,17 @@
 }
 
 *, *:before, *:after {
-  box-sizing: border-box;
   text-rendering: optimizelegibility;
+  box-sizing: border-box;
 }
 
 :root {
-  /* Defaults for all devices */
   --base-unit: 5vh;
   --column-width: 50vw;
 }
 
 @supports (width: clamp(28px, 5vh, 48px)) {
   :root {
-    /* Defaults for all devices and browsers that support clamp() */
-    /* Edge Chromium on Android has an issue with supporting clamp() for widths */
     --base-unit: clamp(28px, 5vh, 48px);
     --column-width: clamp(480px, 50vw, 640px);
   }
@@ -50,86 +47,58 @@
 
 :root {
   --base-unit-half: calc( var(--base-unit) / 2.0 );
-
   --body-text-font-stack: "Vollkorn", serif;
   --heading-text-font-stack: "Vollkorn", serif;
   --font-size: var(--base-unit-half);
   --line-height: 1.4rem;
   --print-line-height: 1.4rem;
-
   --vertical-padding: var(--base-unit);
-
-  /* This 4.0 is a bit cryptic; we are making space for the toc button. */
-  /* Also experimenting with the svh viewport unit */
   --column-height: calc(100vh - calc(var(--vertical-padding) * 4.0));
   --column-height: calc(100svh - calc(var(--vertical-padding) * 4.0));
   --column-gap: var(--base-unit);
-
   --paper-hue: 100;
   --paper-saturation: 50%;
   --paper-lightness: 99%;
   --paper-color: hsla( var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 1.0 );
-
-  /* These are for the "shades" that obscure text on the sides of the screen in wider browsers */
   --shade-color-destination: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.0);
   --shade-color-origin: hsla(var(--paper-hue), var(--paper-saturation), var(--paper-lightness), 0.75);
-
   --spot-color: hsla(340, 100%, 50%, 1.0);
   --selection-color: hsla(340, 100%, 75%, 1.0);
   --text-color: rgb(5, 5, 5);
-
-  --page-count: 1;
 }
-
-/*
-@media(prefers-color-scheme:dark) {
-  :root {
-    --paper-lightness: 1%;
-    --selection-color: hsla(340, 100%, 25%, 1.0);
-    --text-color: rgb(250, 250, 250);
-  }
-}
-*/
 
 ::-moz-selection { background: var(--selection-color); }
 ::selection { background: var(--selection-color); }
 
-/* Reset */
+/* <button> has some gross defaults */
 button {
-  outline: none;
-  border: none;
+  touch-action: manipulation;
   background: none;
   background-color: transparent;
-  touch-action: manipulation;
+  border: none;
+  outline: none;
 }
 
 html {
-  overflow: hidden; /* the key, always */
-  font-size: var(--font-size);
   scroll-behavior: smooth;
-
-  /* ss11 gives us the more normal 1 digit in Vollkorn */
-  font-feature-settings: "kern", "liga", "ss11";
+  overflow: hidden; /* This is the key, always */
+  font-size: var(--font-size);
+  font-feature-settings: "kern", "liga", "ss11"; /* ss11 gives us the more normal 1 digit in Vollkorn */
 }
 
 body {
-  margin: 0;
-
   height: 100vh; /* So the scrollbar appears at the bottom */
-
-  background-color: var(--paper-color);
-  padding: var(--vertical-padding) 0 0 0;
-
   overflow-x: auto;
   overflow-y: hidden;
-
-  text-align: left; /* sigh */
-  line-height: var(--line-height);
-
-  color: var(--text-color);
+  margin: 0;
+  padding: var(--vertical-padding) 0 0 0;
+  background-color: var(--paper-color);
   font-family: var(--body-text-font-stack);
   font-size: 1rem;
   font-weight: 400;
+  text-align: left; /* sigh */
+  line-height: var(--line-height);
+  color: var(--text-color);
 }
 
 div.book div.tutorial {
@@ -137,46 +106,41 @@ div.book div.tutorial {
   flex-direction: column;
   justify-content: center;
   gap: var(--line-height);
-
+  break-after: column;
   width: var(--column-width);
   height: calc(var(--column-height) - 1px);
   overflow: hidden;  /* hacky, prevents weird flow problems */
-
   text-align: center;
-  break-after: column;
 }
 
 div.book div.tutorial h2 {
-  height: auto;
   flex-grow: 0;
+  height: auto;
   margin: 0;
   font-family: var(--body-text-font-stack); /* a bit ugly */
 }
 
 div.book div.tutorial p {
   flex-grow: 0;
-  text-indent: 0;
   margin: 0;
+  text-indent: 0;
 }
 
 button.toc-button {
-  display: flex;
   position: fixed;
-  bottom: 0;
-
-  left: 50vw;
-
+  display: flex;
   flex-direction: column;
   justify-content: center;
-
-  z-index: 100000;
+  bottom: 0;
+  left: 50vw;
+  cursor: pointer;
   width: calc( var(--base-unit) * 2.0 );
   height: var(--base-unit);
-
-  border: 1px solid var(--text-color);
-  background-color: var(--paper-color);
-  color: inherit;
   transform: translateX(-50%) translateY(-50%);
+  background-color: var(--paper-color);
+  border: 1px solid var(--text-color);
+  color: inherit;
+  z-index: 100000;
 }
 
 button.toc-button:hover {
@@ -185,56 +149,43 @@ button.toc-button:hover {
 }
 
 button.toc-button svg {
-  fill: currentColor;
   flex-grow: 1;
+  fill: currentColor;
 }
 
 nav {
   position: fixed;
-
   top: calc( var(--vertical-padding) + var(--base-unit) );
-  /* The toc is 90% of the page's width */
   left: calc( 50vw - var(--column-width) * 0.45);
-
-  z-index: 10000;
-  /* This is all a little bit stupid and I'm sure there's a more
-  principled way to do it */
-  width: calc( var(--column-width) * 0.9 );
+  width: calc( var(--column-width) * 0.9 ); /* This is all a little bit stupid and I'm sure there's a more principled way to do it */
   height: calc( var(--column-height) - var(--base-unit) );
-
-  border: 1px solid var(--spot-color);
-
-  background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
-
   overflow-x: hidden;
   overflow-y: hidden;
-
-  text-align: left;
-
-  transition: opacity 0.1s;
-
+  background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
+  border: 1px solid var(--spot-color);
   box-shadow: 0 0 var(--base-unit-half) 1px var(--spot-color);
+  transition: opacity 0.1s;
+  text-align: left;
+  z-index: 10000;
 }
 
 nav.visible {
-  opacity: 1.0;
   pointer-events: auto;
+  opacity: 1.0;
 }
 
 nav.invisible {
-  opacity: 0.0;
   pointer-events: none;
+  opacity: 0.0;
 }
 
 nav div.toc {
+  position: relative;
   width: calc( var(--column-width) * 0.9 );
   height: calc( var(--column-height) - var(--base-unit) * 2.0 );
-
-  padding: var(--base-unit);
-
   overflow-x: hidden;
   overflow-y: scroll;
-  position: relative;
+  padding: var(--base-unit);
 }
 
 nav div.close-button {
@@ -252,42 +203,31 @@ nav div.close-button:hover {
 }
 
 nav div.controls {
-  display: flex;
   position: fixed;
-
-  /* this is getting a bit silly... */
-  top: calc( var(--vertical-padding) +
-             var(--column-height) - var(--base-unit) * 2.0 );
-  left: calc( 50vw - var(--column-width) * 0.45);
-
-  align-items: center;
+  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
-
+  top: calc( var(--vertical-padding) + var(--column-height) - var(--base-unit) * 2.0 ); /* this is getting a bit silly... */
+  left: calc( 50vw - var(--column-width) * 0.45);
   width: calc( var(--column-width) * 0.9 );
   height: calc( var(--base-unit) * 2.0 );
-
-  border: 1px solid var(--spot-color);
-
   background-color: hsla(var(--paper-hue), calc(var(--paper-saturation) * 2.0), var(--paper-lightness), 1.0);
-
+  border: 1px solid var(--spot-color);
   z-index: 100000;
 }
 
 nav div.controls button {
   flex-shrink: 0;
-
-  margin: 0 var(--base-unit-half) 0 0;
+  cursor: pointer;
   width: var(--base-unit);
   height: auto;
-
+  margin: 0 var(--base-unit-half) 0 0;
   padding: 0;
-
-  cursor: pointer;
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   text-align: center;
   color: var(--spot-color);
-  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 nav div.controls button:last-child {
@@ -299,27 +239,26 @@ nav div.controls button:hover {
 }
 
 nav h1 {
-  margin: 0 0 var(--line-height) 0;
   width: calc( var(--column-width) * 0.9 - calc( var(--base-unit) * 2.0 ) );
+  margin: 0 0 var(--line-height) 0;
   padding: 0;
   font-style: italic;
-  line-height: var(--line-height);
   font-size: 1rem;
   font-weight: 400;
+  line-height: var(--line-height);
 }
 
 nav ol {
-  margin: 0;
   width: 90%;
+  margin: 0 0 var(--line-height) 0;
   padding: 0;
   list-style-type: none;
-  margin-bottom: var(--line-height);
 }
 
 nav ol li {
   margin: 0 0 var(--line-height) 0;
-  line-height: var(--line-height);
   font-size: 1rem;
+  line-height: var(--line-height);
 }
 
 nav ol li:last-of-type {
@@ -327,18 +266,15 @@ nav ol li:last-of-type {
 }
 
 div.bookmark {
-  display: none;
   position: absolute;
-  z-index: 100000;
+  display: none;
+  top: calc( var(--vertical-padding) * -2.5 ); /* now THAT is a magic number */
+  left: calc( var(--column-width) / 2.0 );
   width: var(--base-unit);
   height: calc( var(--base-unit) * 2.0 );
-  top: calc( var(--vertical-padding) * -2.5 ); /* now THAT is a stupid magic number */
-  left: calc( var(--column-width) / 2.0 );
   transform: translateX(-50%);
   fill: var(--spot-color);
-
-  /* https://stackoverflow.com/questions/58404417/mobile-safari-not-rendering-fixed-element-outside-of-viewport-unless-it-has-no-c */
-  /* computers... */
+  z-index: 100000;
 }
 
 /* GENERAL STYLES */
@@ -346,12 +282,12 @@ div.bookmark {
 h2 {
   margin: calc( var(--line-height) * 6.0 ) 0 calc( var(--line-height) * 2.0 ) 0;
   padding: 0;
-  line-height: calc( var(--line-height) * 2.0 );
-
+  break-before: column;
   font-family: var(--heading-text-font-stack);
+  font-style: italic;
   font-size: 1.5rem;
   font-weight: 500;
-  font-style: italic;
+  line-height: calc( var(--line-height) * 2.0 );
 }
 
 a, a:link, a:visited {
@@ -378,38 +314,32 @@ p.spacetime {
 }
 
 small {
-  text-transform: lowercase;
   font-size: 1.025rem;
+  font-feature-settings: "kern", "liga", "ss11", "smcp";
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "ss11", "smcp";
   hyphens: none;
+  text-transform: lowercase;
 }
 
 img {
   display: block;
-  /* This was sort of interesting but, nah */
-  /* transform: translateX( var(--base-unit-half) ); */
-  /* width: calc(var(--column-width) + var(--base-unit)); */
+  break-before: column;
+  break-after: column;
   width: var(--column-width);
   height: var(--column-height);
   max-height: var(--column-height);
-
   overflow: hidden;
-  break-before: column;
-  break-after: column;
-
-  /* max-width: 100%; */
   mix-blend-mode: multiply;
-  object-fit: contain; /* contain? */
+  object-fit: contain;
 }
 
 hr {
-  margin: var(--base-unit) auto var(--base-unit) auto;
+  break-after: avoid-column;
   width: 50%;
+  margin: var(--base-unit) auto var(--base-unit) auto;
   border: none;
   border-bottom: 1px solid var(--spot-color);
-  break-after: avoid-column;
 }
 
 p.last-page {
@@ -419,32 +349,28 @@ p.last-page {
 p.last-page::after {
   display: block;
   height: var(--column-height);
-
   content: "";
 }
 
 blockquote {
-  margin: 0;
-  background-color: rgba(0, 0, 0, 0.125);
-  padding: var(--base-unit);
-  font-style: italic;
   break-before: avoid-column;
+  margin: 0;
+  padding: var(--base-unit);
+  background-color: rgba(0, 0, 0, 0.125);
+  font-style: italic;
 }
 
 /* BOOK BLOCK LAYOUT */
 
 div.book {
   position: relative;
-
-  scroll-snap-align: start;
   column-gap: var(--base-unit);
   column-fill: auto;
   column-count: auto;
   column-width: var(--column-width);
-
-  margin: var(--base-unit-half);
   width: var(--column-width);
   height: var(--column-height);
+  margin: var(--base-unit-half);
 }
 
 div.book div.title {
@@ -452,30 +378,25 @@ div.book div.title {
   flex-direction: column;
   justify-content: center;
   gap: var(--line-height);
-
   width: var(--column-width);
   height: var(--column-height);
   overflow: hidden; /* hacky, prevents weird flow problems */
-
   text-align: center;
 }
 
 div.book div.title h1 {
-  height: auto;
-
   flex-grow: 0;
+  height: auto;
   margin: 0;
   padding: 0;
-  text-transform: lowercase;
-  line-height: calc( var(--line-height) * 2.0 );
-
   font-family: var(--heading-text-font-stack);
   font-size: 2rem;
   font-weight: 500;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "smcp", "ss11";
-
+  text-transform: lowercase;
+  line-height: calc( var(--line-height) * 2.0 );
   color: var(--text-color);
 }
 
@@ -489,57 +410,42 @@ div.book div.title h2 {
 }
 
 div.book h1 {
+  break-before: column;
+  overflow: hidden; /* hacky */
   margin: 0;
   padding: 0;
-  text-transform: lowercase;
-  line-height: var(--column-height);
-
   font-family: var(--heading-text-font-stack);
   font-size: 2rem;
   font-weight: 500;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
   font-variant: small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "smcp", "ss11";
-
-  color: var(--spot-color);
-
   text-align: center;
-
-  overflow: hidden; /* hacky */
-  break-before: column;
+  text-transform: lowercase;
+  line-height: var(--column-height);
+  color: var(--spot-color);
 }
 
 div.book::before {
-  content: "";
   position: fixed;
   top: 0;
-  z-index: 1000;
+  left: 0;
   width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
   height: 100vh;
-
-  /* Specific to left shade */
-  left: 0;
-  background: linear-gradient(to right,
-                              var(--shade-color-origin) 0%,
-                              var(--shade-color-origin) 95%,
-                              var(--shade-color-destination) 100%);
-
+  background: linear-gradient(to right, var(--shade-color-origin) 0%, var(--shade-color-origin) 95%, var(--shade-color-destination) 100%);
+  content: "";
+  z-index: 1000;
 }
 
 div.book::after {
-  content: "";
   position: fixed;
   top: 0;
-  z-index: 1000;
+  right: 0;
   width: calc( ( 100vw - var(--column-width) - var(--base-unit) ) / 2.0 );
   height: 100vh;
-
-  /* Specific to right shade */
-  right: 0;
-  background: linear-gradient(to left,
-                              var(--shade-color-origin) 0%,
-                              var(--shade-color-origin) 95%,
-                              var(--shade-color-destination) 100%);
+  background: linear-gradient(to left, var(--shade-color-origin) 0%, var(--shade-color-origin) 95%, var(--shade-color-destination) 100%);
+  content: "";
+  z-index: 1000;
 }
 
 /* PRINT STYLES */
@@ -547,21 +453,17 @@ div.book::after {
 
 div.print-cover {
   display: none;
-
+  page-break-after: always;
   width: 100%;
   height: 100%;
-
-  page-break-after: always;
 }
 
 div.print-cover div.title {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   width: 100%;
   height: 100%;
-
   text-align: center;
 }
 
@@ -569,15 +471,14 @@ div.print-cover div.title h1 {
   flex-grow: 0;
   margin: 0;
   padding: 0;
-  text-transform: lowercase;
-  line-height: calc( var(--line-height) * 2.0 );
-
   font-family: var(--heading-text-font-stack);
   font-size: 2rem;
   font-weight: 500;
+  font-feature-settings: "kern", "liga", "smcp", "ss11";
   font-variant:small-caps;
   font-variant-caps: small-caps;
-  font-feature-settings: "kern", "liga", "smcp", "ss11";
+  text-transform: lowercase;
+  line-height: calc( var(--line-height) * 2.0 );
 }
 
 div.print-cover div.title h1 span {
@@ -592,7 +493,6 @@ div.print-cover div.title h2 {
 /* RESPONSIVE STUFF */
 
 @media screen and (max-width: 640px) {
-
   :root {
     --column-width: calc(100vw - var(--base-unit));
   }
@@ -600,7 +500,6 @@ div.print-cover div.title h2 {
   div.book::before, div.book::after {
     display: none;
   }
-
 }
 
 @media screen and (min-width: 640px) {
@@ -620,12 +519,11 @@ div.print-cover div.title h2 {
 }
 
 @media print {
-
   html {
     width: 100%;
     overflow: auto;
-    font-size: 16pt;
     overflow: visible !important; /* BLERF this fixed a lot of my print style woes */
+    font-size: 16pt;
   }
 
   div.book::before, div.book::after, nav, button.toc-button, img.cover, div.last-page, div.bookmark, div.tutorial {
@@ -645,9 +543,9 @@ div.print-cover div.title h2 {
     height: auto;
     overflow-x: auto;
     overflow-y: auto;
+    background-color: rgb(255, 255, 255);
     line-height: var(--print-line-height);
     color: rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
   }
 
   div.print-cover {
@@ -655,39 +553,24 @@ div.print-cover div.title h2 {
   }
 
   div.book {
-
-    /* I really wanted columns to work for printing but... they do not */
-    column-count: 0;
-    column-width: auto;
+    columns: 100% 1;
     column-gap: 0;
     column-fill: auto;
-
-    columns: 100% 1;
-
-    margin: 0;
+    column-count: 0;
+    column-width: auto;
     width: 100%;
     height: auto;
-
-    /*
-    column-count: 2;
-    column-width: auto;
-    column-gap: var(--base-unit);
-    column-fill: auto;
-    */
+    margin: 0;
   }
 
   h2 {
-    display: block;
     position: relative;
-
+    display: block;
+    break-before: page !important; /* This isn't working :( */
     margin-top: 0;
     margin-bottom: var(--print-line-height);
-    line-height: var(--print-line-height);
-
     font-size: 1rem;
-
-    /* This isn't working :( */
-    break-before: page !important;
+    line-height: var(--print-line-height);
   }
 
   hr {
@@ -695,11 +578,10 @@ div.print-cover div.title h2 {
   }
 
   small {
-    /* Small caps weren't working correctly when actually printed, so! */
-    text-transform: none;
     font-size: 1.0rem;
     font-weight: 400;
     font-variant: none;
     font-variant-caps: none;
+    text-transform: none; /* Small caps weren't working correctly when actually printed, so! */
   }
 }
