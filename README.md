@@ -6,7 +6,7 @@ is an aspirational name for this project, which aims to provide a lean, fast-loa
 
 You can see a live, current-ish demo of the template [here](https://www.robinsloan.com/books/annabel-scheme-serial/read/).
 
-I present [many of the short stories on my website](https://www.robinsloan.com/stories/) in [an even more minimal version of this template](https://github.com/robinsloan/perfect-edition-middleman) that is currently the locus of most of my fiddling.
+I present [many of the short stories on my website](https://www.robinsloan.com/#short-stories) in an even more minimal version of this template, so you can take a look at those, too.
 
 ## What it is
 
