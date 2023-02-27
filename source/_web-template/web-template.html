@@ -454,10 +454,11 @@ Kobayashi Issa
 
     // Don't turn the page on the second click in a double-click:
     if ((now - lastClick) < CLICK_DEBOUNCE_TIME) {
+      lastClick = now;
       return;
     }
 
-    // But do record the timing of this click:
+    // Still record the timing of this click:
     lastClick = now;
 
     // (Why are people double-clicking? I don't know.)
@@ -474,7 +475,7 @@ Kobayashi Issa
 
     // Okay, there's no avoiding it ... turn the page.
     // Clicks in the left 1/3 of the screen turn back,
-    // click in the right 2/3 turn forward
+    // clicks in the right 2/3 turn forward
     if (e.clientX < (window.innerWidth / 3.0)) {
       turnPageBack();
     } else {
